@@ -5,22 +5,16 @@ namespace CtwTest\Unit\Qa\Rector\Config\RectorConfig;
 use Ctw\Qa\Rector\Config\RectorConfig\DefaultSkip;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class DefaultSkipTest.
- */
 final class DefaultSkipTest extends TestCase
 {
     private DefaultSkip $defaultSkip;
-
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        /** @todo Correctly instantiate tested object to use it. */
         $this->defaultSkip = new DefaultSkip();
     }
-
 
     protected function tearDown(): void
     {
@@ -31,7 +25,10 @@ final class DefaultSkipTest extends TestCase
 
     public function testInvoke(): void
     {
-        /** @todo This test is incomplete. */
-        $this->markTestIncomplete();
+        $config = $this->defaultSkip->__invoke();
+
+        self::assertIsArray($config);
+        self::assertNotEmpty($config);
+
     }
 }

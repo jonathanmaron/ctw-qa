@@ -5,22 +5,16 @@ namespace CtwTest\Unit\Qa\Rector\Config\RectorConfig;
 use Ctw\Qa\Rector\Config\RectorConfig\DefaultSets;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class DefaultSetsTest.
- */
 final class DefaultSetsTest extends TestCase
 {
     private DefaultSets $defaultSets;
-
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        /** @todo Correctly instantiate tested object to use it. */
         $this->defaultSets = new DefaultSets();
     }
-
 
     protected function tearDown(): void
     {
@@ -31,7 +25,10 @@ final class DefaultSetsTest extends TestCase
 
     public function testInvoke(): void
     {
-        /** @todo This test is incomplete. */
-        $this->markTestIncomplete();
+        $config = $this->defaultSets->__invoke();
+
+        foreach ($config as $value) {
+            self::assertStringContainsString('Set/', $value);
+        }
     }
 }

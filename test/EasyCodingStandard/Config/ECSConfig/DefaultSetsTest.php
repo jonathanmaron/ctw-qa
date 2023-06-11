@@ -5,22 +5,16 @@ namespace CtwTest\Unit\Qa\EasyCodingStandard\Config\ECSConfig;
 use Ctw\Qa\EasyCodingStandard\Config\ECSConfig\DefaultSets;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class DefaultSetsTest.
- */
 final class DefaultSetsTest extends TestCase
 {
     private DefaultSets $defaultSets;
-
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        /** @todo Correctly instantiate tested object to use it. */
         $this->defaultSets = new DefaultSets();
     }
-
 
     protected function tearDown(): void
     {
@@ -31,7 +25,12 @@ final class DefaultSetsTest extends TestCase
 
     public function testInvoke(): void
     {
-        /** @todo This test is incomplete. */
-        $this->markTestIncomplete();
+        $config = $this->defaultSets->__invoke();
+
+        foreach ($config as $value) {
+            self::assertStringContainsString('set/', $value);
+            self::assertStringContainsString('Set/', $value);
+            self::assertStringContainsString('ValueObject/', $value);
+        }
     }
 }

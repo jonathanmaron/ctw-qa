@@ -5,22 +5,16 @@ namespace CtwTest\Unit\Qa\EasyCodingStandard\Config\ECSConfig;
 use Ctw\Qa\EasyCodingStandard\Config\ECSConfig\DefaultRules;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class DefaultRulesTest.
- */
 final class DefaultRulesTest extends TestCase
 {
     private DefaultRules $defaultRules;
-
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        /** @todo Correctly instantiate tested object to use it. */
         $this->defaultRules = new DefaultRules();
     }
-
 
     protected function tearDown(): void
     {
@@ -31,7 +25,10 @@ final class DefaultRulesTest extends TestCase
 
     public function testInvoke(): void
     {
-        /** @todo This test is incomplete. */
-        $this->markTestIncomplete();
+        $config = $this->defaultRules->__invoke();
+
+        foreach ($config as $value) {
+            self::assertTrue(str_starts_with($value, 'PhpCsFixer') || str_starts_with($value, 'PHP_CodeSniffer'));
+        }
     }
 }

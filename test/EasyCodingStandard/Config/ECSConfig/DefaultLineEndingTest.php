@@ -4,23 +4,18 @@ namespace CtwTest\Unit\Qa\EasyCodingStandard\Config\ECSConfig;
 
 use Ctw\Qa\EasyCodingStandard\Config\ECSConfig\DefaultLineEnding;
 use PHPUnit\Framework\TestCase;
+use function PHPUnit\Framework\assertEquals;
 
-/**
- * Class DefaultLineEndingTest.
- */
 final class DefaultLineEndingTest extends TestCase
 {
     private DefaultLineEnding $defaultLineEnding;
-
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        /** @todo Correctly instantiate tested object to use it. */
         $this->defaultLineEnding = new DefaultLineEnding();
     }
-
 
     protected function tearDown(): void
     {
@@ -31,7 +26,8 @@ final class DefaultLineEndingTest extends TestCase
 
     public function testInvoke(): void
     {
-        /** @todo This test is incomplete. */
-        $this->markTestIncomplete();
+        $config = $this->defaultLineEnding->__invoke();
+
+        assertEquals("\n", $config);
     }
 }
