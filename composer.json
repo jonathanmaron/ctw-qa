@@ -1,6 +1,6 @@
 {
     "name": "ctw/ctw-qa",
-    "description": "",
+    "description": "Configuration for commonly used quality assurance (QA) tools for PHP projects.",
     "license": "proprietary",
     "type": "library",
     "require": {
