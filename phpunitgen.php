@@ -120,7 +120,7 @@ return [
      | Tells if the test class should declare strict types.
      |--------------------------------------------------------------------------
      */
-    'testClassStrictTypes'     => false,
+    'testClassStrictTypes'     => true,
 
     /*
      |--------------------------------------------------------------------------
