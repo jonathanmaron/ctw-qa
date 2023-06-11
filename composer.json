@@ -13,11 +13,13 @@
         "phpstan/phpstan": "^1.7",
         "phpstan/phpstan-strict-rules": "^1.3",
         "phpunit/phpunit": "^10.0",
+        "phpunitgen/console": "^5.0",
         "symfony/var-dumper": "^6.0"
     },
     "autoload": {
         "psr-4": {
-            "Ctw\\Qa\\": "src"
+            "Ctw\\Qa\\": "src",
+            "CtwTest\\Qa\\": "test"
         }
     },
     "config": {
@@ -44,6 +46,7 @@
             "@phpstan"
         ],
         "rector": "php vendor/bin/rector process --dry-run",
-        "rector-fix": "php vendor/bin/rector process"
+        "rector-fix": "php vendor/bin/rector process",
+        "test": "php vendor/bin/phpunit"
     }
 }

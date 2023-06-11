@@ -19,7 +19,12 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->skip($skip());
 
     $rectorConfig->paths(
-        [sprintf('%s/src', __DIR__), sprintf('%s/ecs.php', __DIR__), sprintf('%s/rector.php', __DIR__)]
+        [
+            sprintf('%s/src', __DIR__),
+            sprintf('%s/src', __DIR__),
+            sprintf('%s/ecs.php', __DIR__),
+            sprintf('%s/rector.php', __DIR__),
+        ]
     );
 
     $rectorConfig->skip([...$skip(), sprintf('%s/test/asset/*', __DIR__)]);
