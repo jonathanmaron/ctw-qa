@@ -18,8 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Ctw\\Qa\\": "src",
-            "CtwTest\\Qa\\": "test"
+            "Ctw\\Qa\\": "src"
         }
     },
     "config": {
