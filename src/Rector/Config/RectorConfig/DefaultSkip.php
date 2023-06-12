@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Ctw\Qa\Rector\Config\RectorConfig;
 
+use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 
 class DefaultSkip
@@ -15,6 +16,7 @@ class DefaultSkip
             '*/node_modules/*',
             '*/vendor/*',
             NullToStrictStringFuncCallArgRector::class,
+            RenameParamToMatchTypeRector::class,
         ];
     }
 }
