@@ -16,8 +16,6 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->sets($sets());
 
-    $rectorConfig->skip($skip());
-
     $rectorConfig->paths(
         [
             sprintf('%s/src', __DIR__),
