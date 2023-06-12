@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Ctw\Qa\Rector\Config\RectorConfig;
 
-use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
+use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
+use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 
 class DefaultSkip
@@ -21,6 +22,7 @@ class DefaultSkip
             RenameParamToMatchTypeRector::class,
             RenameVariableToMatchMethodCallReturnTypeRector::class,
             RenameVariableToMatchNewTypeRector::class,
+            NewlineAfterStatementRector::class, // on phtml only
         ];
     }
 }
