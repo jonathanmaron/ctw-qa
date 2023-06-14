@@ -1,5 +1,9 @@
 parameters:
     level: max
+    bootstrapFiles:
+        - %currentWorkingDirectory%/vendor/autoload.php
+    scanDirectories:
+        - %currentWorkingDirectory%/vendor/symplify/easy-coding-standard/vendor
     parallel:
         jobSize: 64
         maximumNumberOfProcesses: 256

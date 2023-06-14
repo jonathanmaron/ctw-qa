@@ -2,9 +2,5 @@ includes:
     - config/phpstan/common.neon
     - phpstan-baseline.neon
 parameters:
-    bootstrapFiles:
-        - %currentWorkingDirectory%/vendor/autoload.php
-    scanDirectories:
-        - %currentWorkingDirectory%/vendor/symplify/easy-coding-standard/vendor
     paths:
         - src
