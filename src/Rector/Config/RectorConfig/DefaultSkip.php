@@ -21,28 +21,28 @@ class DefaultSkip
         /**
          * Rules defined in
          * \Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_81
-         * that should not be skipped
+         * that should be skipped
          */
         $upToPhp81 = [NullToStrictStringFuncCallArgRector::class];
 
         /**
          * Rules defined in
          * \Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_100
-         * that should not be skipped
+         * that should be skipped
          */
         $phpunit100 = [];
 
         /**
          * Rules defined in
          * \Rector\Set\ValueObject\SetList::CODE_QUALITY
-         * that should not be skipped
+         * that should be skipped
          */
         $codeQuality = [];
 
         /**
          * Rules defined in
          * \Rector\Set\ValueObject\SetList::CODING_STYLE
-         * that should not be skipped
+         * that should be skipped
          */
         $codingStyle = [
             NewlineAfterStatementRector::class => ['*.phtml'],
@@ -51,14 +51,14 @@ class DefaultSkip
         /**
          * Rules defined in
          * \Rector\Set\ValueObject\SetList::DEAD_CODE
-         * that should not be skipped
+         * that should be skipped
          */
         $deadCode = [];
 
         /**
          * Rules defined in
          * \Rector\Set\ValueObject\SetList::NAMING
-         * that should not be skipped
+         * that should be skipped
          */
         $naming = [
             RenameParamToMatchTypeRector::class,

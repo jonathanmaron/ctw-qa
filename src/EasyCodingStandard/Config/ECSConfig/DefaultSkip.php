@@ -23,14 +23,14 @@ class DefaultSkip
         /**
          * Rules defined in
          * \Symplify\EasyCodingStandard\ValueObject\Set\SetList::COMMON
-         * that should not be skipped
+         * that should be skipped
          */
         $common = [NotOperatorWithSuccessorSpaceFixer::class];
 
         /**
          * Rules defined in
          * \Symplify\EasyCodingStandard\ValueObject\Set\SetList::PSR_12
-         * that should not be skipped
+         * that should be skipped
          */
         $psr12 = [
             BinaryOperatorSpacesFixer::class,
