@@ -15,18 +15,32 @@ class DefaultSkip
 {
     public function __invoke(): array
     {
-        return [
-            '*/build/*',
-            '*/compiled/*',
-            '*/node_modules/*',
-            '*/vendor/*',
+        /**
+         * Common project directories that should be skipped
+         */
+        $project = ['*/build/*', '*/compiled/*', '*/node_modules/*', '*/vendor/*'];
+
+        /**
+         * Rules defined in
+         * \Symplify\EasyCodingStandard\ValueObject\Set\SetList::COMMON
+         * that should not be skipped
+         */
+        $common = [NotOperatorWithSuccessorSpaceFixer::class];
+
+        /**
+         * Rules defined in
+         * \Symplify\EasyCodingStandard\ValueObject\Set\SetList::PSR_12
+         * that should not be skipped
+         */
+        $psr12 = [
             BinaryOperatorSpacesFixer::class,
             BlankLineAfterOpeningTagFixer::class,
             BracesFixer::class,
             FunctionDeclarationFixer::class,
-            NotOperatorWithSuccessorSpaceFixer::class,
             NoTrailingWhitespaceInCommentFixer::class,
-            StatementIndentationFixer::class,  // disable in phtml only
+            StatementIndentationFixer::class, // @todo: How to skip only for phtml files?
         ];
+
+        return [...$project, ...$common, ...$psr12];
     }
 }

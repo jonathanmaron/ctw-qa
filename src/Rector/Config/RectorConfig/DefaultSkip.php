@@ -16,33 +16,33 @@ class DefaultSkip
         /**
          * Common project directories that should be skipped
          */
-        $common = ['*/build/*', '*/compiled/*', '*/node_modules/*', '*/vendor/*'];
+        $project = ['*/build/*', '*/compiled/*', '*/node_modules/*', '*/vendor/*'];
 
         /**
          * Rules defined in
          * \Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_81
-         * that should not be used
+         * that should not be skipped
          */
         $upToPhp81 = [NullToStrictStringFuncCallArgRector::class];
 
         /**
          * Rules defined in
          * \Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_100
-         * that should not be used
+         * that should not be skipped
          */
         $phpunit100 = [];
 
         /**
          * Rules defined in
          * \Rector\Set\ValueObject\SetList::CODE_QUALITY
-         * that should not be used
+         * that should not be skipped
          */
         $codeQuality = [];
 
         /**
          * Rules defined in
          * \Rector\Set\ValueObject\SetList::CODING_STYLE
-         * that should not be used
+         * that should not be skipped
          */
         $codingStyle = [
             NewlineAfterStatementRector::class, // @todo: How to skip only for phtml files?
@@ -51,14 +51,14 @@ class DefaultSkip
         /**
          * Rules defined in
          * \Rector\Set\ValueObject\SetList::DEAD_CODE
-         * that should not be used
+         * that should not be skipped
          */
         $deadCode = [];
 
         /**
          * Rules defined in
          * \Rector\Set\ValueObject\SetList::NAMING
-         * that should not be used
+         * that should not be skipped
          */
         $naming = [
             RenameParamToMatchTypeRector::class,
@@ -67,7 +67,7 @@ class DefaultSkip
         ];
 
         return [
-            ...$common,
+            ...$project,
             ...$upToPhp81,
             ...$phpunit100,
             ...$codeQuality,
