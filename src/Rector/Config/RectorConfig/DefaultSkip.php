@@ -45,7 +45,8 @@ class DefaultSkip
          * that should not be skipped
          */
         $codingStyle = [
-            NewlineAfterStatementRector::class, // @todo: How to skip only for phtml files?
+            // @todo: How to skip only for phtml files?
+            NewlineAfterStatementRector::class => ['*.phtml'],
         ];
 
         /**
