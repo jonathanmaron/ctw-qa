@@ -4,13 +4,13 @@ parameters:
         - %currentWorkingDirectory%/vendor/autoload.php
     scanDirectories:
         - %currentWorkingDirectory%/vendor/symplify/easy-coding-standard/vendor
+    fileExtensions:
+        - php
+        - phtml
     parallel:
         jobSize: 64
         maximumNumberOfProcesses: 256
         minimumNumberOfJobsPerProcess: 4
         processTimeout: 240.0
-    fileExtensions:
-        - php
-        - phtml
     checkGenericClassInNonGenericObjectType: false
     checkMissingIterableValueType: false
