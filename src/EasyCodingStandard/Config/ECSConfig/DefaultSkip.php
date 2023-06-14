@@ -38,7 +38,6 @@ class DefaultSkip
             BracesFixer::class,
             FunctionDeclarationFixer::class,
             NoTrailingWhitespaceInCommentFixer::class,
-            // @todo: How to skip only for phtml files?
             StatementIndentationFixer::class => ['*.phtml'],
         ];
 
