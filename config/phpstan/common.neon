@@ -1,9 +1,9 @@
 parameters:
     level: max
     bootstrapFiles:
-        - %currentWorkingDirectory%/vendor/autoload.php
+        - vendor/autoload.php
     scanDirectories:
-        - %currentWorkingDirectory%/vendor/symplify/easy-coding-standard/vendor
+        - vendor/symplify/easy-coding-standard/vendor
     fileExtensions:
         - php
         - phtml
