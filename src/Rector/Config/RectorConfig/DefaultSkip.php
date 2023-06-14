@@ -13,16 +13,67 @@ class DefaultSkip
 {
     public function __invoke(): array
     {
-        return [
-            '*/build/*',
-            '*/compiled/*',
-            '*/node_modules/*',
-            '*/vendor/*',
-            NullToStrictStringFuncCallArgRector::class,
+        /**
+         * Common project directories that should be skipped
+         */
+        $common = ['*/build/*', '*/compiled/*', '*/node_modules/*', '*/vendor/*'];
+
+        /**
+         * Rules defined in
+         * \Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_81
+         * that should not be used
+         */
+        $upToPhp81 = [NullToStrictStringFuncCallArgRector::class];
+
+        /**
+         * Rules defined in
+         * \Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_100
+         * that should not be used
+         */
+        $phpunit100 = [];
+
+        /**
+         * Rules defined in
+         * \Rector\Set\ValueObject\SetList::CODE_QUALITY
+         * that should not be used
+         */
+        $codeQuality = [];
+
+        /**
+         * Rules defined in
+         * \Rector\Set\ValueObject\SetList::CODING_STYLE
+         * that should not be used
+         */
+        $codingStyle = [
+            NewlineAfterStatementRector::class, // @todo: How to skip only for phtml files?
+        ];
+
+        /**
+         * Rules defined in
+         * \Rector\Set\ValueObject\SetList::DEAD_CODE
+         * that should not be used
+         */
+        $deadCode = [];
+
+        /**
+         * Rules defined in
+         * \Rector\Set\ValueObject\SetList::NAMING
+         * that should not be used
+         */
+        $naming = [
             RenameParamToMatchTypeRector::class,
             RenameVariableToMatchMethodCallReturnTypeRector::class,
             RenameVariableToMatchNewTypeRector::class,
-            NewlineAfterStatementRector::class, // on phtml only
+        ];
+
+        return [
+            ...$common,
+            ...$upToPhp81,
+            ...$phpunit100,
+            ...$codeQuality,
+            ...$codingStyle,
+            ...$deadCode,
+            ...$naming,
         ];
     }
 }
