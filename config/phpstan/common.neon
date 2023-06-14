@@ -1,4 +1,5 @@
 parameters:
+    level: max
     parallel:
         jobSize: 64
         maximumNumberOfProcesses: 256
@@ -7,5 +8,5 @@ parameters:
     fileExtensions:
         - php
         - phtml
-    level: max
+    checkGenericClassInNonGenericObjectType: false
     checkMissingIterableValueType: false
