@@ -45,7 +45,7 @@ class DefaultSkip
          * that should be skipped
          */
         $codingStyle = [
-            NewlineAfterStatementRector::class => ['*.phtml'],
+            NewlineAfterStatementRector::class => '*.phtml',
         ];
 
         /**
