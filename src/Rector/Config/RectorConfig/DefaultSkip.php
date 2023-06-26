@@ -16,7 +16,7 @@ class DefaultSkip
         /**
          * Common project directories that should be skipped
          */
-        $project = ['*/build/*', '*/compiled/*', '*/node_modules/*', '*/vendor/*'];
+        $project = ['*/build/*', '*/compiled/*', '*/doc/*', '*/docs/*', '*/node_modules/*', '*/vendor/*'];
 
         /**
          * Rules defined in
