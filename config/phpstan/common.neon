@@ -12,5 +12,8 @@ parameters:
         maximumNumberOfProcesses: 256
         minimumNumberOfJobsPerProcess: 4
         processTimeout: 240.0
-    checkGenericClassInNonGenericObjectType: false
-    checkMissingIterableValueType: false
+    ignoreErrors:
+        -
+            identifier: missingType.iterableValue
+        -
+            identifier: missingType.generics
