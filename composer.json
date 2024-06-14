@@ -1,4 +1,4 @@
-{  "minimum-stability": "dev", "prefer-stable": true,  
+{
     "name": "ctw/ctw-qa",
     "description": "Configuration for commonly used quality assurance (QA) tools for PHP projects.",
     "license": "proprietary",
@@ -15,6 +15,8 @@
         "phpunit/phpunit": "^10.0",
         "symfony/var-dumper": "^7.0"
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Ctw\\Qa\\": "src"
