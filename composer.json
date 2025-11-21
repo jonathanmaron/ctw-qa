@@ -7,6 +7,7 @@
         "php": "^8.3",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
         "rector/rector": "^2.2",
         "symplify/easy-coding-standard": "^13.0"
