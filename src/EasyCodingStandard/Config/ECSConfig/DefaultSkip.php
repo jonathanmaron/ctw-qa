@@ -4,11 +4,13 @@ declare(strict_types=1);
 namespace Ctw\Qa\EasyCodingStandard\Config\ECSConfig;
 
 use PhpCsFixer\Fixer\Basic\BracesFixer;
+use PhpCsFixer\Fixer\ClassNotation\NoBlankLinesAfterClassOpeningFixer;
 use PhpCsFixer\Fixer\Comment\NoTrailingWhitespaceInCommentFixer;
 use PhpCsFixer\Fixer\FunctionNotation\FunctionDeclarationFixer;
 use PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
+use PhpCsFixer\Fixer\Whitespace\NoExtraBlankLinesFixer;
 use PhpCsFixer\Fixer\Whitespace\StatementIndentationFixer;
 
 class DefaultSkip
@@ -41,6 +43,14 @@ class DefaultSkip
             StatementIndentationFixer::class => ['*.phtml'],
         ];
 
-        return [...$project, ...$common, ...$psr12];
+        /**
+         * Personal preferences
+         */
+        $personal = [
+            NoBlankLinesAfterClassOpeningFixer::class,
+            NoExtraBlankLinesFixer::class,
+        ];
+
+        return [...$project, ...$common, ...$psr12, ...$personal];
     }
 }
