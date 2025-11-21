@@ -1,11 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
-namespace CtwTest\Unit\Qa\EasyCodingStandard\Config\ECSConfig;
+namespace CtwTest\Qa\EasyCodingStandard\Config\ECSConfig;
 
 use Ctw\Qa\EasyCodingStandard\Config\ECSConfig\DefaultLineEnding;
 use PHPUnit\Framework\TestCase;
-use function PHPUnit\Framework\assertEquals;
 
 final class DefaultLineEndingTest extends TestCase
 {
@@ -18,17 +18,77 @@ final class DefaultLineEndingTest extends TestCase
         $this->defaultLineEnding = new DefaultLineEnding();
     }
 
-    protected function tearDown(): void
+    /**
+     * Test that invocation returns expected line ending value
+     */
+    public function testInvokeReturnsExpectedValue(): void
     {
-        parent::tearDown();
+        $expected = "\n";
 
-        unset($this->defaultLineEnding);
+        $actual = ($this->defaultLineEnding)();
+
+        self::assertSame($expected, $actual);
     }
 
-    public function testInvoke(): void
+    /**
+     * Test that invocation returns non-empty string
+     */
+    public function testInvokeReturnsNonEmptyString(): void
     {
-        $config = $this->defaultLineEnding->__invoke();
+        $actual = ($this->defaultLineEnding)();
 
-        assertEquals("\n", $config);
+        self::assertNotEmpty($actual);
+    }
+
+    /**
+     * Test that invocation returns single character
+     */
+    public function testInvokeReturnsSingleCharacter(): void
+    {
+        $actual = ($this->defaultLineEnding)();
+
+        self::assertSame(1, strlen($actual));
+    }
+
+    /**
+     * Test that invocation returns newline character
+     */
+    public function testInvokeReturnsNewlineCharacter(): void
+    {
+        $actual = ($this->defaultLineEnding)();
+
+        self::assertSame("\n", $actual);
+    }
+
+    /**
+     * Test that invocation returns LF line ending not CRLF
+     */
+    public function testInvokeReturnsLfNotCrlf(): void
+    {
+        $actual = ($this->defaultLineEnding)();
+
+        self::assertNotSame("\r\n", $actual);
+        self::assertSame("\n", $actual);
+    }
+
+    /**
+     * Test that invocation is idempotent
+     */
+    public function testInvokeIsIdempotent(): void
+    {
+        $firstCall = ($this->defaultLineEnding)();
+        $secondCall = ($this->defaultLineEnding)();
+
+        self::assertSame($firstCall, $secondCall);
+    }
+
+    /**
+     * Test that invocation returns Unix-style line ending
+     */
+    public function testInvokeReturnsUnixStyleLineEnding(): void
+    {
+        $actual = ($this->defaultLineEnding)();
+
+        self::assertSame(PHP_EOL === "\n" ? PHP_EOL : "\n", $actual);
     }
 }
