@@ -46,10 +46,7 @@ class DefaultSkip
         /**
          * Personal preferences
          */
-        $personal = [
-            NoBlankLinesAfterClassOpeningFixer::class,
-            NoExtraBlankLinesFixer::class,
-        ];
+        $personal = [NoBlankLinesAfterClassOpeningFixer::class, NoExtraBlankLinesFixer::class];
 
         return [...$project, ...$common, ...$psr12, ...$personal];
     }
