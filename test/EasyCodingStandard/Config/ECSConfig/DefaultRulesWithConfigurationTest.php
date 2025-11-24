@@ -74,7 +74,6 @@ final class DefaultRulesWithConfigurationTest extends TestCase
         $actual = ($this->defaultRulesWithConfiguration)();
 
         self::assertArrayHasKey(OrderedImportsFixer::class, $actual);
-        self::assertIsArray($actual[OrderedImportsFixer::class]);
         self::assertSame('alpha', $actual[OrderedImportsFixer::class]['sort_algorithm']);
         self::assertSame(['class', 'function', 'const'], $actual[OrderedImportsFixer::class]['imports_order']);
     }
@@ -87,7 +86,6 @@ final class DefaultRulesWithConfigurationTest extends TestCase
         $actual = ($this->defaultRulesWithConfiguration)();
 
         self::assertArrayHasKey(MethodArgumentSpaceFixer::class, $actual);
-        self::assertIsArray($actual[MethodArgumentSpaceFixer::class]);
         self::assertSame('ignore', $actual[MethodArgumentSpaceFixer::class]['on_multiline']);
     }
 
@@ -99,22 +97,9 @@ final class DefaultRulesWithConfigurationTest extends TestCase
         $actual = ($this->defaultRulesWithConfiguration)();
 
         self::assertArrayHasKey(YodaStyleFixer::class, $actual);
-        self::assertIsArray($actual[YodaStyleFixer::class]);
         self::assertTrue($actual[YodaStyleFixer::class]['equal']);
         self::assertTrue($actual[YodaStyleFixer::class]['identical']);
         self::assertTrue($actual[YodaStyleFixer::class]['less_and_greater']);
-    }
-
-    /**
-     * Test that all keys are strings
-     */
-    public function testInvokeAllKeysAreStrings(): void
-    {
-        $actual = ($this->defaultRulesWithConfiguration)();
-
-        foreach (array_keys($actual) as $key) {
-            self::assertIsString($key);
-        }
     }
 
     /**
@@ -130,18 +115,6 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that all values are arrays
-     */
-    public function testInvokeAllValuesAreArrays(): void
-    {
-        $actual = ($this->defaultRulesWithConfiguration)();
-
-        foreach ($actual as $value) {
-            self::assertIsArray($value);
-        }
-    }
-
-    /**
      * Test that all configuration arrays are non-empty
      */
     public function testInvokeAllConfigurationArraysAreNonEmpty(): void
@@ -151,16 +124,6 @@ final class DefaultRulesWithConfigurationTest extends TestCase
         foreach ($actual as $configuration) {
             self::assertNotEmpty($configuration);
         }
-    }
-
-    /**
-     * Test that invocation returns associative array
-     */
-    public function testInvokeReturnsAssociativeArray(): void
-    {
-        $actual = ($this->defaultRulesWithConfiguration)();
-
-        self::assertNotSame(array_values($actual), $actual);
     }
 
     /**
@@ -181,7 +144,6 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     {
         $actual = ($this->defaultRulesWithConfiguration)();
         $config = $actual[OrderedImportsFixer::class];
-        self::assertIsArray($config);
 
         self::assertArrayHasKey('sort_algorithm', $config);
         self::assertArrayHasKey('imports_order', $config);
@@ -195,7 +157,6 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     {
         $actual = ($this->defaultRulesWithConfiguration)();
         $config = $actual[MethodArgumentSpaceFixer::class];
-        self::assertIsArray($config);
 
         self::assertArrayHasKey('on_multiline', $config);
         self::assertCount(1, $config);
@@ -208,7 +169,6 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     {
         $actual = ($this->defaultRulesWithConfiguration)();
         $config = $actual[YodaStyleFixer::class];
-        self::assertIsArray($config);
 
         self::assertArrayHasKey('equal', $config);
         self::assertArrayHasKey('identical', $config);

@@ -92,21 +92,9 @@ final class DefaultFileExtensionsTest extends TestCase
     }
 
     /**
-     * Test that all values are strings
+     * Test that all values are non-empty strings
      */
-    public function testInvokeAllValuesAreStrings(): void
-    {
-        $actual = ($this->defaultFileExtensions)();
-
-        foreach ($actual as $value) {
-            self::assertIsString($value);
-        }
-    }
-
-    /**
-     * Test that all values are non-empty
-     */
-    public function testInvokeAllValuesAreNonEmpty(): void
+    public function testInvokeAllValuesAreNonEmptyStrings(): void
     {
         $actual = ($this->defaultFileExtensions)();
 

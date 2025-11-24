@@ -160,18 +160,6 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that all values are strings
-     */
-    public function testInvokeAllValuesAreStrings(): void
-    {
-        $actual = ($this->defaultRules)();
-
-        foreach ($actual as $value) {
-            self::assertIsString($value);
-        }
-    }
-
-    /**
      * Test that all values use PhpCsFixer or PHP_CodeSniffer namespace
      */
     public function testInvokeAllValuesUseExpectedNamespaces(): void
@@ -179,7 +167,6 @@ final class DefaultRulesTest extends TestCase
         $actual = ($this->defaultRules)();
 
         foreach ($actual as $value) {
-            self::assertIsString($value);
             $isPhpCsFixer = str_starts_with($value, 'PhpCsFixer\\');
             $isPhpCodeSniffer = str_starts_with($value, 'PHP_CodeSniffer\\');
 

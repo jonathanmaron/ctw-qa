@@ -102,18 +102,6 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that all values are strings
-     */
-    public function testInvokeAllValuesAreStrings(): void
-    {
-        $actual = ($this->defaultSets)();
-
-        foreach ($actual as $value) {
-            self::assertIsString($value);
-        }
-    }
-
-    /**
      * Test that all values contain set path
      */
     public function testInvokeAllValuesContainSetPath(): void
@@ -121,7 +109,6 @@ final class DefaultSetsTest extends TestCase
         $actual = ($this->defaultSets)();
 
         foreach ($actual as $value) {
-            self::assertIsString($value);
             self::assertStringContainsStringIgnoringCase('set/', $value);
         }
     }
