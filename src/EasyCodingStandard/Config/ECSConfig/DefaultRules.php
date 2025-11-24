@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Ctw\Qa\EasyCodingStandard\Config\ECSConfig;
 
+use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Standards\Generic\Sniffs\Arrays\DisallowLongArraySyntaxSniff;
 use PhpCsFixer\Fixer\ClassNotation\OrderedTraitsFixer;
 use PhpCsFixer\Fixer\ControlStructure\TrailingCommaInMultilineFixer;
+use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\Fixer\Import\NoUnusedImportsFixer;
 use PhpCsFixer\Fixer\LanguageConstruct\IsNullFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocTypesOrderFixer;
@@ -15,6 +17,9 @@ use PhpCsFixer\Fixer\Strict\StrictParamFixer;
 
 class DefaultRules
 {
+    /**
+     * @return array<class-string<FixerInterface|Sniff>>
+     */
     public function __invoke(): array
     {
         return [

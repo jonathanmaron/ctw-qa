@@ -3,12 +3,17 @@ declare(strict_types=1);
 
 namespace Ctw\Qa\EasyCodingStandard\Config\ECSConfig;
 
+use PHP_CodeSniffer\Sniffs\Sniff;
 use PhpCsFixer\Fixer\ControlStructure\YodaStyleFixer;
+use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\Fixer\FunctionNotation\MethodArgumentSpaceFixer;
 use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
 
 class DefaultRulesWithConfiguration
 {
+    /**
+     * @return array<class-string<FixerInterface|Sniff>, array>
+     */
     public function __invoke(): array
     {
         return [

@@ -19,46 +19,34 @@ class DefaultSkip
         $project = ['*/build/*', '*/compiled/*', '*/doc/*', '*/docs/*', '*/node_modules/*', '*/vendor/*'];
 
         /**
-         * Rules defined in
-         * \Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_81
-         * that should be skipped
+         * Rules defined in LevelSetList::UP_TO_PHP_81 that should be skipped
          */
         $upToPhp81 = [NullToStrictStringFuncCallArgRector::class];
 
         /**
-         * Rules defined in
-         * \Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_100
-         * that should be skipped
+         * Rules defined in PHPUnitSetList::PHPUNIT_100 that should be skipped
          */
         $phpunit100 = [];
 
         /**
-         * Rules defined in
-         * \Rector\Set\ValueObject\SetList::CODE_QUALITY
-         * that should be skipped
+         * Rules defined in SetList::CODE_QUALITY that should be skipped
          */
         $codeQuality = [];
 
         /**
-         * Rules defined in
-         * \Rector\Set\ValueObject\SetList::CODING_STYLE
-         * that should be skipped
+         * Rules defined in SetList::CODING_STYLE that should be skipped
          */
         $codingStyle = [
             NewlineAfterStatementRector::class => '*.phtml',
         ];
 
         /**
-         * Rules defined in
-         * \Rector\Set\ValueObject\SetList::DEAD_CODE
-         * that should be skipped
+         * Rules defined in SetList::DEAD_CODE that should be skipped
          */
         $deadCode = [];
 
         /**
-         * Rules defined in
-         * \Rector\Set\ValueObject\SetList::NAMING
-         * that should be skipped
+         * Rules defined in SetList::NAMING that should be skipped
          */
         $naming = [
             RenameParamToMatchTypeRector::class,

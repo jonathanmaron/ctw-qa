@@ -7,6 +7,9 @@ use Symplify\EasyCodingStandard\ValueObject\Set\SetList;
 
 class DefaultSets
 {
+    /**
+     * @return array<string>
+     */
     public function __invoke(): array
     {
         return [SetList::CLEAN_CODE, SetList::COMMON, SetList::PSR_12, SetList::STRICT, SetList::SYMPLIFY];

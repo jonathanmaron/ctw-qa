@@ -15,6 +15,9 @@ use PhpCsFixer\Fixer\Whitespace\StatementIndentationFixer;
 
 class DefaultSkip
 {
+    /**
+     * @return array<class-string<\PHP_CodeSniffer\Sniffs\Sniff|\PhpCsFixer\Fixer\FixerInterface>|int<0, max>, null|list<string>|string>
+     */
     public function __invoke(): array
     {
         /**
@@ -24,14 +27,14 @@ class DefaultSkip
 
         /**
          * Rules defined in
-         * \Symplify\EasyCodingStandard\ValueObject\Set\SetList::COMMON
+         * \Simplify\EasyCodingStandard\ValueObject\Set\SetList::COMMON
          * that should be skipped
          */
         $common = [NotOperatorWithSuccessorSpaceFixer::class];
 
         /**
          * Rules defined in
-         * \Symplify\EasyCodingStandard\ValueObject\Set\SetList::PSR_12
+         * \Simplify\EasyCodingStandard\ValueObject\Set\SetList::PSR_12
          * that should be skipped
          */
         $psr12 = [

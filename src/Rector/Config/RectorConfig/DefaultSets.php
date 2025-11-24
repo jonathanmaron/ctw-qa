@@ -9,6 +9,9 @@ use Rector\Set\ValueObject\SetList;
 
 class DefaultSets
 {
+    /**
+     * @return array<string>
+     */
     public function __invoke(): array
     {
         return [
