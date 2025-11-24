@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Ctw\Qa\EasyCodingStandard\Config\ECSConfig;
 
+use PHP_CodeSniffer\Sniffs\Sniff;
 use PhpCsFixer\Fixer\Basic\BracesFixer;
 use PhpCsFixer\Fixer\ClassNotation\NoBlankLinesAfterClassOpeningFixer;
 use PhpCsFixer\Fixer\Comment\NoTrailingWhitespaceInCommentFixer;
+use PhpCsFixer\Fixer\FixerInterface;
 use PhpCsFixer\Fixer\FunctionNotation\FunctionDeclarationFixer;
 use PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
@@ -16,7 +18,7 @@ use PhpCsFixer\Fixer\Whitespace\StatementIndentationFixer;
 class DefaultSkip
 {
     /**
-     * @return array<class-string<\PHP_CodeSniffer\Sniffs\Sniff|\PhpCsFixer\Fixer\FixerInterface>|int<0, max>, null|list<string>|string>
+     * @return array<class-string<FixerInterface|Sniff>|int<0, max>, null|list<string>|string>
      */
     public function __invoke(): array
     {
@@ -26,16 +28,12 @@ class DefaultSkip
         $project = ['*/build/*', '*/compiled/*', '*/doc/*', '*/docs/*', '*/node_modules/*', '*/vendor/*'];
 
         /**
-         * Rules defined in
-         * \Simplify\EasyCodingStandard\ValueObject\Set\SetList::COMMON
-         * that should be skipped
+         * Rules defined in SetList::COMMON that should be skipped
          */
         $common = [NotOperatorWithSuccessorSpaceFixer::class];
 
         /**
-         * Rules defined in
-         * \Simplify\EasyCodingStandard\ValueObject\Set\SetList::PSR_12
-         * that should be skipped
+         * Rules defined in SetList::PSR_12 that should be skipped
          */
         $psr12 = [
             BinaryOperatorSpacesFixer::class,
