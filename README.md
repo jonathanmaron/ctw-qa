@@ -1,7 +1,9 @@
-# CTW Quality Assurance (QA) Configuration
+# Package "ctw/ctw-qa"
 
-[![PHP Version](https://img.shields.io/badge/PHP-8.3%2B-blue.svg)](https://www.php.net/)
-[![License](https://img.shields.io/badge/license-proprietary-red.svg)]()
+[![GitHub Actions](https://github.com/jonathanmaron/ctw-qa/actions/workflows/tests.yml/badge.svg)](https://github.com/jonathanmaron/ctw-qa/actions/workflows/tests.yml)
+[![Scrutinizer Build](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/badges/build.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/build-status/master)
+[![Scrutinizer Quality](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/?branch=master)
 
 A comprehensive PHP package that provides centralized, opinionated configuration for modern PHP quality assurance tools. Stop configuring the same tools over and over across multiple projects—use battle-tested defaults that enforce PHP 8.3+ best practices.
 
