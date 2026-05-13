@@ -24,7 +24,7 @@ final class DefaultSetsTest extends TestCase
      */
     public function testInvokeReturnsExpectedSets(): void
     {
-        $expected = [SetList::CLEAN_CODE, SetList::COMMON, SetList::PSR_12, SetList::STRICT, SetList::SYMPLIFY];
+        $expected = [SetList::CLEAN_CODE, SetList::COMMON, SetList::PSR_12, SetList::SYMPLIFY];
 
         $actual = ($this->defaultSets)();
 
@@ -42,13 +42,13 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly five sets
+     * Test that invocation returns exactly four sets
      */
-    public function testInvokeReturnsExactlyFiveSets(): void
+    public function testInvokeReturnsExactlyFourSets(): void
     {
         $actual = ($this->defaultSets)();
 
-        self::assertCount(5, $actual);
+        self::assertCount(4, $actual);
     }
 
     /**
@@ -82,13 +82,13 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation includes STRICT set
+     * Test that invocation excludes STRICT set
      */
-    public function testInvokeIncludesStrictSet(): void
+    public function testInvokeExcludesStrictSet(): void
     {
         $actual = ($this->defaultSets)();
 
-        self::assertContains(SetList::STRICT, $actual);
+        self::assertNotContains(SetList::STRICT, $actual);
     }
 
     /**
