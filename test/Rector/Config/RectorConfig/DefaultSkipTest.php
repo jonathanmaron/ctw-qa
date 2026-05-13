@@ -24,7 +24,7 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation returns non-empty array
+     * Test that invocation never returns an empty array, since the curated skip list always has entries.
      */
     public function testInvokeReturnsNonEmptyArray(): void
     {
@@ -34,7 +34,7 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation includes common project directories
+     * Test that invocation includes all common project directory glob patterns.
      */
     public function testInvokeIncludesCommonProjectDirectories(): void
     {
@@ -49,7 +49,7 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation includes UP_TO_PHP_81 skipped rules
+     * Test that invocation includes UP_TO_PHP_81 skipped rules.
      */
     public function testInvokeIncludesUpToPhp81SkippedRules(): void
     {
@@ -59,7 +59,7 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation includes NAMING skipped rules
+     * Test that invocation includes NAMING skipped rules.
      */
     public function testInvokeIncludesNamingSkippedRules(): void
     {
@@ -71,19 +71,9 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation includes CODING_STYLE associative entries
+     * Test that invocation maps NewlineAfterStatementRector to *.phtml templates only.
      */
-    public function testInvokeIncludesCodingStyleAssociativeEntries(): void
-    {
-        $actual = ($this->defaultSkip)();
-
-        self::assertArrayHasKey(NewlineAfterStatementRector::class, $actual);
-    }
-
-    /**
-     * Test that invocation contains string keys for phtml specific rules
-     */
-    public function testInvokeContainsStringKeysForPhtmlSpecificRules(): void
+    public function testInvokeMapsNewlineAfterStatementRectorToPhtmlOnly(): void
     {
         $actual = ($this->defaultSkip)();
 
@@ -92,37 +82,67 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation is idempotent
+     * Test that invocation produces the same result when called more than once.
      */
-    public function testInvokeIsIdempotent(): void
+    public function testInvokeIsIdempotentAcrossRepeatedCalls(): void
     {
-        $firstCall = ($this->defaultSkip)();
+        $firstCall  = ($this->defaultSkip)();
         $secondCall = ($this->defaultSkip)();
 
         self::assertSame($firstCall, $secondCall);
     }
 
     /**
-     * Test that invocation contains expected minimum number of items
+     * Test that invocation returns exactly the curated 11 skip entries (6 project + 1 PHP-81 + 1 coding-style + 3 naming).
      */
-    public function testInvokeContainsMinimumNumberOfItems(): void
+    public function testInvokeReturnsElevenSkipEntries(): void
     {
         $actual = ($this->defaultSkip)();
 
-        self::assertGreaterThanOrEqual(10, count($actual));
+        self::assertCount(11, $actual);
     }
 
     /**
-     * Test that string values are non-empty
+     * Test that every string value in the returned array is non-empty.
      */
     public function testInvokeStringValuesAreNonEmpty(): void
     {
         $actual = ($this->defaultSkip)();
 
-        foreach ($actual as $key => $value) {
+        foreach ($actual as $value) {
             if (is_string($value)) {
                 self::assertNotEmpty($value);
             }
         }
+    }
+
+    /**
+     * Test that all six project directory patterns use the leading and trailing wildcard format.
+     */
+    public function testInvokeProjectDirectoryPatternsUseWildcardFormat(): void
+    {
+        $actual             = ($this->defaultSkip)();
+        $projectDirectories = array_filter($actual, static function (mixed $value): bool {
+            return is_string($value) && str_starts_with($value, '*/') && str_ends_with($value, '/*');
+        });
+
+        self::assertCount(6, $projectDirectories);
+    }
+
+    /**
+     * Test that the indexed (numeric-key) string values contain no duplicates.
+     */
+    public function testInvokeIndexedStringValuesAreUnique(): void
+    {
+        $actual = ($this->defaultSkip)();
+
+        $indexedValues = [];
+        foreach ($actual as $key => $value) {
+            if (is_int($key) && is_string($value)) {
+                $indexedValues[] = $value;
+            }
+        }
+
+        self::assertSame(array_values(array_unique($indexedValues)), $indexedValues);
     }
 }

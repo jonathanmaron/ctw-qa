@@ -19,9 +19,9 @@ final class DefaultIndentationTest extends TestCase
     }
 
     /**
-     * Test that invocation returns expected indentation value
+     * Test that invocation returns the literal 'spaces' value expected by ECS configuration.
      */
-    public function testInvokeReturnsExpectedValue(): void
+    public function testInvokeReturnsSpacesLiteral(): void
     {
         $expected = 'spaces';
 
@@ -31,7 +31,7 @@ final class DefaultIndentationTest extends TestCase
     }
 
     /**
-     * Test that invocation returns non-empty string
+     * Test that invocation returns a non-empty string so ECS does not reject the setting.
      */
     public function testInvokeReturnsNonEmptyString(): void
     {
@@ -41,7 +41,7 @@ final class DefaultIndentationTest extends TestCase
     }
 
     /**
-     * Test that invocation returns lowercase string
+     * Test that invocation returns a fully lowercase string, matching ECS's expected casing.
      */
     public function testInvokeReturnsLowercaseString(): void
     {
@@ -51,23 +51,23 @@ final class DefaultIndentationTest extends TestCase
     }
 
     /**
-     * Test that invocation is idempotent
+     * Test that invocation does not return 'tabs', since the project standard is spaces.
      */
-    public function testInvokeIsIdempotent(): void
-    {
-        $firstCall = ($this->defaultIndentation)();
-        $secondCall = ($this->defaultIndentation)();
-
-        self::assertSame($firstCall, $secondCall);
-    }
-
-    /**
-     * Test that invocation returns exactly 'spaces' value
-     */
-    public function testInvokeReturnsSpacesValue(): void
+    public function testInvokeDoesNotReturnTabs(): void
     {
         $actual = ($this->defaultIndentation)();
 
-        self::assertSame('spaces', $actual);
+        self::assertNotSame('tabs', $actual);
+    }
+
+    /**
+     * Test that invocation produces the same result when called more than once.
+     */
+    public function testInvokeIsIdempotentAcrossRepeatedCalls(): void
+    {
+        $firstCall  = ($this->defaultIndentation)();
+        $secondCall = ($this->defaultIndentation)();
+
+        self::assertSame($firstCall, $secondCall);
     }
 }

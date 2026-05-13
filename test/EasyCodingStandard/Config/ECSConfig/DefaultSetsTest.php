@@ -20,9 +20,9 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns expected sets
+     * Test that invocation returns the full expected list of ECS set paths in source order.
      */
-    public function testInvokeReturnsExpectedSets(): void
+    public function testInvokeReturnsExpectedSetsInSourceOrder(): void
     {
         $expected = [SetList::CLEAN_CODE, SetList::COMMON, SetList::PSR_12, SetList::SYMPLIFY];
 
@@ -32,7 +32,7 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns non-empty array
+     * Test that invocation never returns an empty array, since ECS requires at least one set.
      */
     public function testInvokeReturnsNonEmptyArray(): void
     {
@@ -42,7 +42,7 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly four sets
+     * Test that invocation returns exactly four sets after the STRICT deprecation removal.
      */
     public function testInvokeReturnsExactlyFourSets(): void
     {
@@ -52,7 +52,7 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation includes CLEAN_CODE set
+     * Test that invocation includes the CLEAN_CODE set.
      */
     public function testInvokeIncludesCleanCodeSet(): void
     {
@@ -62,7 +62,7 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation includes COMMON set
+     * Test that invocation includes the COMMON set.
      */
     public function testInvokeIncludesCommonSet(): void
     {
@@ -72,7 +72,7 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation includes PSR_12 set
+     * Test that invocation includes the PSR_12 set.
      */
     public function testInvokeIncludesPsr12Set(): void
     {
@@ -82,7 +82,7 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation excludes STRICT set
+     * Test that invocation excludes the STRICT set, since ECS 13.1.x throws on load when it is included.
      */
     public function testInvokeExcludesStrictSet(): void
     {
@@ -92,7 +92,7 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation includes SYMPLIFY set
+     * Test that invocation includes the SYMPLIFY set.
      */
     public function testInvokeIncludesSymplifySet(): void
     {
@@ -102,7 +102,7 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that all values contain set path
+     * Test that every returned value looks like an ECS set file path (contains 'set/').
      */
     public function testInvokeAllValuesContainSetPath(): void
     {
@@ -114,7 +114,7 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns indexed array
+     * Test that invocation returns a zero-indexed (list-style) array.
      */
     public function testInvokeReturnsIndexedArray(): void
     {
@@ -124,11 +124,33 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation is idempotent
+     * Test that invocation returns no duplicate set paths.
      */
-    public function testInvokeIsIdempotent(): void
+    public function testInvokeReturnsUniqueSets(): void
     {
-        $firstCall = ($this->defaultSets)();
+        $actual = ($this->defaultSets)();
+
+        self::assertSame(array_values(array_unique($actual)), $actual);
+    }
+
+    /**
+     * Test that every returned set path is a non-empty string.
+     */
+    public function testInvokeAllValuesAreNonEmptyStrings(): void
+    {
+        $actual = ($this->defaultSets)();
+
+        foreach ($actual as $value) {
+            self::assertNotEmpty($value);
+        }
+    }
+
+    /**
+     * Test that invocation produces the same result when called more than once.
+     */
+    public function testInvokeIsIdempotentAcrossRepeatedCalls(): void
+    {
+        $firstCall  = ($this->defaultSets)();
         $secondCall = ($this->defaultSets)();
 
         self::assertSame($firstCall, $secondCall);

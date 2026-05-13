@@ -22,7 +22,7 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that invocation returns expected rules with configuration
+     * Test that invocation returns the full expected configured-rules map.
      */
     public function testInvokeReturnsExpectedRulesWithConfiguration(): void
     {
@@ -47,7 +47,7 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that invocation returns non-empty array
+     * Test that invocation never returns an empty array.
      */
     public function testInvokeReturnsNonEmptyArray(): void
     {
@@ -57,7 +57,7 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly three rules
+     * Test that invocation returns exactly three configured rules, pinning the curated count.
      */
     public function testInvokeReturnsExactlyThreeRules(): void
     {
@@ -67,7 +67,7 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that invocation includes OrderedImportsFixer with configuration
+     * Test that invocation includes OrderedImportsFixer with its alphabetised, class/function/const ordering.
      */
     public function testInvokeIncludesOrderedImportsFixerWithConfiguration(): void
     {
@@ -79,7 +79,7 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that invocation includes MethodArgumentSpaceFixer with configuration
+     * Test that invocation includes MethodArgumentSpaceFixer with multiline handling set to ignore.
      */
     public function testInvokeIncludesMethodArgumentSpaceFixerWithConfiguration(): void
     {
@@ -90,7 +90,7 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that invocation includes YodaStyleFixer with configuration
+     * Test that invocation includes YodaStyleFixer with all comparison flags enabled.
      */
     public function testInvokeIncludesYodaStyleFixerWithConfiguration(): void
     {
@@ -103,7 +103,7 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that all keys use PhpCsFixer namespace
+     * Test that every configured rule key is namespaced under PhpCsFixer\, with no foreign keys.
      */
     public function testInvokeAllKeysUsePhpCsFixerNamespace(): void
     {
@@ -115,7 +115,7 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that all configuration arrays are non-empty
+     * Test that every rule's configuration array is non-empty, since empty configs are ineffective.
      */
     public function testInvokeAllConfigurationArraysAreNonEmpty(): void
     {
@@ -127,18 +127,18 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that invocation is idempotent
+     * Test that invocation produces the same result when called more than once.
      */
-    public function testInvokeIsIdempotent(): void
+    public function testInvokeIsIdempotentAcrossRepeatedCalls(): void
     {
-        $firstCall = ($this->defaultRulesWithConfiguration)();
+        $firstCall  = ($this->defaultRulesWithConfiguration)();
         $secondCall = ($this->defaultRulesWithConfiguration)();
 
         self::assertSame($firstCall, $secondCall);
     }
 
     /**
-     * Test that OrderedImportsFixer configuration has correct structure
+     * Test that the OrderedImportsFixer config exposes exactly the two expected keys.
      */
     public function testInvokeOrderedImportsFixerConfigurationHasCorrectStructure(): void
     {
@@ -151,7 +151,7 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that MethodArgumentSpaceFixer configuration has correct structure
+     * Test that the MethodArgumentSpaceFixer config exposes exactly the single expected key.
      */
     public function testInvokeMethodArgumentSpaceFixerConfigurationHasCorrectStructure(): void
     {
@@ -163,7 +163,7 @@ final class DefaultRulesWithConfigurationTest extends TestCase
     }
 
     /**
-     * Test that YodaStyleFixer configuration has correct structure
+     * Test that the YodaStyleFixer config exposes exactly the three expected flag keys.
      */
     public function testInvokeYodaStyleFixerConfigurationHasCorrectStructure(): void
     {
@@ -174,5 +174,16 @@ final class DefaultRulesWithConfigurationTest extends TestCase
         self::assertArrayHasKey('identical', $config);
         self::assertArrayHasKey('less_and_greater', $config);
         self::assertCount(3, $config);
+    }
+
+    /**
+     * Test that every configured rule key is unique (PHP guarantees this; the assertion documents the invariant).
+     */
+    public function testInvokeReturnsUniqueRuleKeys(): void
+    {
+        $actual = ($this->defaultRulesWithConfiguration)();
+        $keys   = array_keys($actual);
+
+        self::assertSame(array_values(array_unique($keys)), $keys);
     }
 }

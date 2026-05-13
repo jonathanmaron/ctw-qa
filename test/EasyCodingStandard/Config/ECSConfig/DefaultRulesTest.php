@@ -28,9 +28,9 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation returns expected rules
+     * Test that invocation returns the full expected list of fixer/sniff class strings in source order.
      */
-    public function testInvokeReturnsExpectedRules(): void
+    public function testInvokeReturnsExpectedRulesInSourceOrder(): void
     {
         $expected = [
             DeclareStrictTypesFixer::class,
@@ -50,7 +50,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation returns non-empty array
+     * Test that invocation never returns an empty array, since ECS requires at least one rule.
      */
     public function testInvokeReturnsNonEmptyArray(): void
     {
@@ -60,7 +60,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly nine rules
+     * Test that invocation returns exactly nine rules, pinning the curated rule count.
      */
     public function testInvokeReturnsExactlyNineRules(): void
     {
@@ -70,7 +70,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation includes DeclareStrictTypesFixer
+     * Test that invocation includes DeclareStrictTypesFixer.
      */
     public function testInvokeIncludesDeclareStrictTypesFixer(): void
     {
@@ -80,7 +80,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation includes DisallowLongArraySyntaxSniff
+     * Test that invocation includes DisallowLongArraySyntaxSniff.
      */
     public function testInvokeIncludesDisallowLongArraySyntaxSniff(): void
     {
@@ -90,7 +90,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation includes IsNullFixer
+     * Test that invocation includes IsNullFixer.
      */
     public function testInvokeIncludesIsNullFixer(): void
     {
@@ -100,7 +100,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation includes NoUnusedImportsFixer
+     * Test that invocation includes NoUnusedImportsFixer.
      */
     public function testInvokeIncludesNoUnusedImportsFixer(): void
     {
@@ -110,7 +110,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation includes OrderedTraitsFixer
+     * Test that invocation includes OrderedTraitsFixer.
      */
     public function testInvokeIncludesOrderedTraitsFixer(): void
     {
@@ -120,7 +120,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation includes PhpdocTypesOrderFixer
+     * Test that invocation includes PhpdocTypesOrderFixer.
      */
     public function testInvokeIncludesPhpdocTypesOrderFixer(): void
     {
@@ -130,7 +130,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation includes StrictComparisonFixer
+     * Test that invocation includes StrictComparisonFixer.
      */
     public function testInvokeIncludesStrictComparisonFixer(): void
     {
@@ -140,7 +140,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation includes StrictParamFixer
+     * Test that invocation includes StrictParamFixer.
      */
     public function testInvokeIncludesStrictParamFixer(): void
     {
@@ -150,7 +150,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation includes TrailingCommaInMultilineFixer
+     * Test that invocation includes TrailingCommaInMultilineFixer.
      */
     public function testInvokeIncludesTrailingCommaInMultilineFixer(): void
     {
@@ -160,14 +160,14 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that all values use PhpCsFixer or PHP_CodeSniffer namespace
+     * Test that every rule is namespaced under PhpCsFixer\ or PHP_CodeSniffer\, with no foreign entries.
      */
     public function testInvokeAllValuesUseExpectedNamespaces(): void
     {
         $actual = ($this->defaultRules)();
 
         foreach ($actual as $value) {
-            $isPhpCsFixer = str_starts_with($value, 'PhpCsFixer\\');
+            $isPhpCsFixer     = str_starts_with($value, 'PhpCsFixer\\');
             $isPhpCodeSniffer = str_starts_with($value, 'PHP_CodeSniffer\\');
 
             self::assertTrue(
@@ -178,7 +178,7 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation returns indexed array
+     * Test that invocation returns a zero-indexed (list-style) array.
      */
     public function testInvokeReturnsIndexedArray(): void
     {
@@ -188,11 +188,39 @@ final class DefaultRulesTest extends TestCase
     }
 
     /**
-     * Test that invocation is idempotent
+     * Test that invocation returns no duplicate rule class strings.
      */
-    public function testInvokeIsIdempotent(): void
+    public function testInvokeReturnsUniqueRules(): void
     {
-        $firstCall = ($this->defaultRules)();
+        $actual = ($this->defaultRules)();
+
+        self::assertSame(array_values(array_unique($actual)), $actual);
+    }
+
+    /**
+     * Test that rules are listed alphabetically by class basename, matching the convention in source.
+     */
+    public function testInvokeReturnsRulesSortedAlphabeticallyByBasename(): void
+    {
+        $actual = ($this->defaultRules)();
+
+        $basenames = array_map(
+            static fn (string $fqcn): string => substr((string) strrchr($fqcn, '\\'), 1),
+            $actual
+        );
+
+        $sorted = $basenames;
+        sort($sorted, SORT_STRING);
+
+        self::assertSame($sorted, $basenames);
+    }
+
+    /**
+     * Test that invocation produces the same result when called more than once.
+     */
+    public function testInvokeIsIdempotentAcrossRepeatedCalls(): void
+    {
+        $firstCall  = ($this->defaultRules)();
         $secondCall = ($this->defaultRules)();
 
         self::assertSame($firstCall, $secondCall);

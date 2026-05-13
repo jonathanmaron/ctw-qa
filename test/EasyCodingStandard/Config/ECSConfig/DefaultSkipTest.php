@@ -26,7 +26,7 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation returns non-empty array
+     * Test that invocation never returns an empty array, since the curated skip list always has entries.
      */
     public function testInvokeReturnsNonEmptyArray(): void
     {
@@ -36,7 +36,7 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation includes common project directories
+     * Test that invocation includes all common project directory glob patterns.
      */
     public function testInvokeIncludesCommonProjectDirectories(): void
     {
@@ -51,7 +51,7 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation includes COMMON skipped rules
+     * Test that invocation includes COMMON skipped rules.
      */
     public function testInvokeIncludesCommonSkippedRules(): void
     {
@@ -61,7 +61,7 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation includes PSR_12 skipped rules
+     * Test that invocation includes the indexed PSR-12 skipped rules.
      */
     public function testInvokeIncludesPsr12SkippedRules(): void
     {
@@ -75,56 +75,46 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation includes StatementIndentationFixer
+     * Test that invocation maps StatementIndentationFixer to *.phtml templates only.
      */
-    public function testInvokeIncludesStatementIndentationFixer(): void
-    {
-        $actual = ($this->defaultSkip)();
-
-        self::assertArrayHasKey(StatementIndentationFixer::class, $actual);
-    }
-
-    /**
-     * Test that invocation contains string keys for phtml specific rules
-     */
-    public function testInvokeContainsStringKeysForPhtmlSpecificRules(): void
+    public function testInvokeMapsStatementIndentationFixerToPhtmlOnly(): void
     {
         $actual = ($this->defaultSkip)();
 
         self::assertArrayHasKey(StatementIndentationFixer::class, $actual);
         self::assertIsArray($actual[StatementIndentationFixer::class]);
-        self::assertContains('*.phtml', $actual[StatementIndentationFixer::class]);
+        self::assertSame(['*.phtml'], $actual[StatementIndentationFixer::class]);
     }
 
     /**
-     * Test that invocation is idempotent
+     * Test that invocation produces the same result when called more than once.
      */
-    public function testInvokeIsIdempotent(): void
+    public function testInvokeIsIdempotentAcrossRepeatedCalls(): void
     {
-        $firstCall = ($this->defaultSkip)();
+        $firstCall  = ($this->defaultSkip)();
         $secondCall = ($this->defaultSkip)();
 
         self::assertSame($firstCall, $secondCall);
     }
 
     /**
-     * Test that invocation contains expected minimum number of items
+     * Test that invocation returns exactly the curated 15 skip entries (6 project + 1 common + 6 PSR-12 + 2 personal).
      */
-    public function testInvokeContainsMinimumNumberOfItems(): void
+    public function testInvokeReturnsFifteenSkipEntries(): void
     {
         $actual = ($this->defaultSkip)();
 
-        self::assertGreaterThanOrEqual(12, count($actual));
+        self::assertCount(15, $actual);
     }
 
     /**
-     * Test that string values are non-empty
+     * Test that every string value in the returned array is non-empty.
      */
     public function testInvokeStringValuesAreNonEmpty(): void
     {
         $actual = ($this->defaultSkip)();
 
-        foreach ($actual as $key => $value) {
+        foreach ($actual as $value) {
             if (is_string($value)) {
                 self::assertNotEmpty($value);
             }
@@ -132,33 +122,50 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that project directory patterns use wildcard format
+     * Test that all six project directory patterns use the leading and trailing wildcard format.
      */
     public function testInvokeProjectDirectoryPatternsUseWildcardFormat(): void
     {
-        $actual = ($this->defaultSkip)();
+        $actual             = ($this->defaultSkip)();
         $projectDirectories = array_filter($actual, static function (mixed $value): bool {
             return is_string($value) && str_starts_with($value, '*/') && str_ends_with($value, '/*');
         });
 
-        self::assertGreaterThanOrEqual(6, count($projectDirectories));
+        self::assertCount(6, $projectDirectories);
     }
 
     /**
-     * Test that fixer class names use PhpCsFixer namespace
+     * Test that all eight fixer class strings (excluding the keyed entry) live under PhpCsFixer\.
      */
     public function testInvokeFixerClassNamesUsePhpCsFixerNamespace(): void
     {
-        $actual = ($this->defaultSkip)();
-        $stringValues = array_filter($actual, static fn(mixed $value): bool => is_string($value));
+        $actual       = ($this->defaultSkip)();
+        $stringValues = array_filter($actual, static fn (mixed $value): bool => is_string($value));
         $fixerClasses = array_filter($stringValues, static function (string $value): bool {
             return str_contains($value, '\\Fixer\\');
         });
 
-        self::assertGreaterThanOrEqual(6, count($fixerClasses));
+        self::assertCount(8, $fixerClasses);
 
         foreach ($fixerClasses as $fixerClass) {
             self::assertStringStartsWith('PhpCsFixer\\', $fixerClass);
         }
+    }
+
+    /**
+     * Test that the indexed (numeric-key) string values contain no duplicates.
+     */
+    public function testInvokeIndexedStringValuesAreUnique(): void
+    {
+        $actual = ($this->defaultSkip)();
+
+        $indexedValues = [];
+        foreach ($actual as $key => $value) {
+            if (is_int($key) && is_string($value)) {
+                $indexedValues[] = $value;
+            }
+        }
+
+        self::assertSame(array_values(array_unique($indexedValues)), $indexedValues);
     }
 }

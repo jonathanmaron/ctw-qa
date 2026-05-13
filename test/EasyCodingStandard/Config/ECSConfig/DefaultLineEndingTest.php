@@ -19,9 +19,9 @@ final class DefaultLineEndingTest extends TestCase
     }
 
     /**
-     * Test that invocation returns expected line ending value
+     * Test that invocation returns the LF character ("\n") expected by ECS configuration.
      */
-    public function testInvokeReturnsExpectedValue(): void
+    public function testInvokeReturnsLineFeedCharacter(): void
     {
         $expected = "\n";
 
@@ -31,7 +31,7 @@ final class DefaultLineEndingTest extends TestCase
     }
 
     /**
-     * Test that invocation returns non-empty string
+     * Test that invocation returns a non-empty string so ECS does not reject the setting.
      */
     public function testInvokeReturnsNonEmptyString(): void
     {
@@ -41,7 +41,7 @@ final class DefaultLineEndingTest extends TestCase
     }
 
     /**
-     * Test that invocation returns single character
+     * Test that invocation returns a single character, ruling out multi-character sequences.
      */
     public function testInvokeReturnsSingleCharacter(): void
     {
@@ -51,44 +51,33 @@ final class DefaultLineEndingTest extends TestCase
     }
 
     /**
-     * Test that invocation returns newline character
+     * Test that invocation never returns a Windows-style CRLF sequence.
      */
-    public function testInvokeReturnsNewlineCharacter(): void
-    {
-        $actual = ($this->defaultLineEnding)();
-
-        self::assertSame("\n", $actual);
-    }
-
-    /**
-     * Test that invocation returns LF line ending not CRLF
-     */
-    public function testInvokeReturnsLfNotCrlf(): void
+    public function testInvokeDoesNotReturnCarriageReturnLineFeed(): void
     {
         $actual = ($this->defaultLineEnding)();
 
         self::assertNotSame("\r\n", $actual);
-        self::assertSame("\n", $actual);
     }
 
     /**
-     * Test that invocation is idempotent
+     * Test that invocation never returns a bare carriage return.
      */
-    public function testInvokeIsIdempotent(): void
-    {
-        $firstCall = ($this->defaultLineEnding)();
-        $secondCall = ($this->defaultLineEnding)();
-
-        self::assertSame($firstCall, $secondCall);
-    }
-
-    /**
-     * Test that invocation returns Unix-style line ending
-     */
-    public function testInvokeReturnsUnixStyleLineEnding(): void
+    public function testInvokeDoesNotReturnCarriageReturn(): void
     {
         $actual = ($this->defaultLineEnding)();
 
-        self::assertSame(PHP_EOL === "\n" ? PHP_EOL : "\n", $actual);
+        self::assertNotSame("\r", $actual);
+    }
+
+    /**
+     * Test that invocation produces the same result when called more than once.
+     */
+    public function testInvokeIsIdempotentAcrossRepeatedCalls(): void
+    {
+        $firstCall  = ($this->defaultLineEnding)();
+        $secondCall = ($this->defaultLineEnding)();
+
+        self::assertSame($firstCall, $secondCall);
     }
 }

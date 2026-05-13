@@ -19,9 +19,9 @@ final class DefaultFileExtensionsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns expected file extensions
+     * Test that invocation returns the canonical ['php', 'phtml'] list in source order.
      */
-    public function testInvokeReturnsExpectedExtensions(): void
+    public function testInvokeReturnsPhpAndPhtmlInOrder(): void
     {
         $expected = ['php', 'phtml'];
 
@@ -31,7 +31,7 @@ final class DefaultFileExtensionsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns non-empty array
+     * Test that invocation never returns an empty array, since ECS requires at least one extension.
      */
     public function testInvokeReturnsNonEmptyArray(): void
     {
@@ -41,7 +41,7 @@ final class DefaultFileExtensionsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly two extensions
+     * Test that invocation returns exactly two extensions, pinning the supported file types.
      */
     public function testInvokeReturnsExactlyTwoExtensions(): void
     {
@@ -51,7 +51,7 @@ final class DefaultFileExtensionsTest extends TestCase
     }
 
     /**
-     * Test that invocation includes php extension
+     * Test that invocation includes the 'php' extension for plain PHP files.
      */
     public function testInvokeIncludesPhpExtension(): void
     {
@@ -61,7 +61,7 @@ final class DefaultFileExtensionsTest extends TestCase
     }
 
     /**
-     * Test that invocation includes phtml extension
+     * Test that invocation includes the 'phtml' extension for templating files.
      */
     public function testInvokeIncludesPhtmlExtension(): void
     {
@@ -71,18 +71,28 @@ final class DefaultFileExtensionsTest extends TestCase
     }
 
     /**
-     * Test that invocation is idempotent
+     * Test that invocation returns no duplicate extensions.
      */
-    public function testInvokeIsIdempotent(): void
+    public function testInvokeReturnsUniqueExtensions(): void
     {
-        $firstCall = ($this->defaultFileExtensions)();
+        $actual = ($this->defaultFileExtensions)();
+
+        self::assertSame(array_values(array_unique($actual)), $actual);
+    }
+
+    /**
+     * Test that invocation produces the same result when called more than once.
+     */
+    public function testInvokeIsIdempotentAcrossRepeatedCalls(): void
+    {
+        $firstCall  = ($this->defaultFileExtensions)();
         $secondCall = ($this->defaultFileExtensions)();
 
         self::assertSame($firstCall, $secondCall);
     }
 
     /**
-     * Test that invocation returns indexed array
+     * Test that invocation returns a zero-indexed (list-style) array.
      */
     public function testInvokeReturnsIndexedArray(): void
     {
@@ -92,7 +102,7 @@ final class DefaultFileExtensionsTest extends TestCase
     }
 
     /**
-     * Test that all values are non-empty strings
+     * Test that every returned extension is a non-empty string, since ECS rejects empty patterns.
      */
     public function testInvokeAllValuesAreNonEmptyStrings(): void
     {
@@ -100,6 +110,18 @@ final class DefaultFileExtensionsTest extends TestCase
 
         foreach ($actual as $value) {
             self::assertNotEmpty($value);
+        }
+    }
+
+    /**
+     * Test that no returned extension contains a leading dot, since ECS expects bare extensions.
+     */
+    public function testInvokeExtensionsHaveNoLeadingDot(): void
+    {
+        $actual = ($this->defaultFileExtensions)();
+
+        foreach ($actual as $value) {
+            self::assertStringStartsNotWith('.', $value);
         }
     }
 }
