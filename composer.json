@@ -4,7 +4,7 @@
     "license": "proprietary",
     "type": "library",
     "require": {
-        "php": "^8.3",
+        "php": "^8.5",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
