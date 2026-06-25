@@ -5,6 +5,9 @@ namespace Ctw\Qa\EasyCodingStandard\Config\ECSConfig;
 
 class DefaultLineEnding
 {
+    /**
+     * @return "\n"
+     */
     public function __invoke(): string
     {
         return "\n";

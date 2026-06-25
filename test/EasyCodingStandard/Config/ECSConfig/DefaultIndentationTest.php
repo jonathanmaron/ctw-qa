@@ -25,7 +25,7 @@ final class DefaultIndentationTest extends TestCase
     {
         $expected = 'spaces';
 
-        $actual = ($this->defaultIndentation)();
+        $actual = $this->value();
 
         self::assertSame($expected, $actual);
     }
@@ -35,7 +35,7 @@ final class DefaultIndentationTest extends TestCase
      */
     public function testInvokeReturnsNonEmptyString(): void
     {
-        $actual = ($this->defaultIndentation)();
+        $actual = $this->value();
 
         self::assertNotEmpty($actual);
     }
@@ -45,7 +45,7 @@ final class DefaultIndentationTest extends TestCase
      */
     public function testInvokeReturnsLowercaseString(): void
     {
-        $actual = ($this->defaultIndentation)();
+        $actual = $this->value();
 
         self::assertSame(strtolower($actual), $actual);
     }
@@ -55,7 +55,7 @@ final class DefaultIndentationTest extends TestCase
      */
     public function testInvokeDoesNotReturnTabs(): void
     {
-        $actual = ($this->defaultIndentation)();
+        $actual = $this->value();
 
         self::assertNotSame('tabs', $actual);
     }
@@ -65,9 +65,18 @@ final class DefaultIndentationTest extends TestCase
      */
     public function testInvokeIsIdempotentAcrossRepeatedCalls(): void
     {
-        $firstCall  = ($this->defaultIndentation)();
-        $secondCall = ($this->defaultIndentation)();
+        $firstCall  = $this->value();
+        $secondCall = $this->value();
 
         self::assertSame($firstCall, $secondCall);
+    }
+
+    /**
+     * Returns the invocation result as a plain string so the assertions
+     * exercise the runtime value rather than its narrowed literal type.
+     */
+    private function value(): string
+    {
+        return ($this->defaultIndentation)();
     }
 }

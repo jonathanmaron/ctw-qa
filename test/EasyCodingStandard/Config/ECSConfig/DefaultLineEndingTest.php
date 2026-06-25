@@ -25,7 +25,7 @@ final class DefaultLineEndingTest extends TestCase
     {
         $expected = "\n";
 
-        $actual = ($this->defaultLineEnding)();
+        $actual = $this->value();
 
         self::assertSame($expected, $actual);
     }
@@ -35,7 +35,7 @@ final class DefaultLineEndingTest extends TestCase
      */
     public function testInvokeReturnsNonEmptyString(): void
     {
-        $actual = ($this->defaultLineEnding)();
+        $actual = $this->value();
 
         self::assertNotEmpty($actual);
     }
@@ -45,7 +45,7 @@ final class DefaultLineEndingTest extends TestCase
      */
     public function testInvokeReturnsSingleCharacter(): void
     {
-        $actual = ($this->defaultLineEnding)();
+        $actual = $this->value();
 
         self::assertSame(1, strlen($actual));
     }
@@ -55,7 +55,7 @@ final class DefaultLineEndingTest extends TestCase
      */
     public function testInvokeDoesNotReturnCarriageReturnLineFeed(): void
     {
-        $actual = ($this->defaultLineEnding)();
+        $actual = $this->value();
 
         self::assertNotSame("\r\n", $actual);
     }
@@ -65,7 +65,7 @@ final class DefaultLineEndingTest extends TestCase
      */
     public function testInvokeDoesNotReturnCarriageReturn(): void
     {
-        $actual = ($this->defaultLineEnding)();
+        $actual = $this->value();
 
         self::assertNotSame("\r", $actual);
     }
@@ -75,9 +75,18 @@ final class DefaultLineEndingTest extends TestCase
      */
     public function testInvokeIsIdempotentAcrossRepeatedCalls(): void
     {
-        $firstCall  = ($this->defaultLineEnding)();
-        $secondCall = ($this->defaultLineEnding)();
+        $firstCall  = $this->value();
+        $secondCall = $this->value();
 
         self::assertSame($firstCall, $secondCall);
+    }
+
+    /**
+     * Returns the invocation result as a plain string so the assertions
+     * exercise the runtime value rather than its narrowed literal type.
+     */
+    private function value(): string
+    {
+        return ($this->defaultLineEnding)();
     }
 }
