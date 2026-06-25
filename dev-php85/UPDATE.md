@@ -5,8 +5,24 @@
 - **Date:** 2026-06-25
 
 This is a **TODO list** of the changes required for this package to run cleanly
-under PHP 8.5.7. Nothing here has been fixed yet — the fixes happen in a second
-step. Boxes are intentionally left unchecked.
+under PHP 8.5.7. Boxes are intentionally left unchecked.
+
+---
+
+## ✅ Applied on `php85`
+
+> Supersedes §3 below. This package is consumed by every other `ctw/*` package
+> via `ctw/ctw-qa: dev-php85`, so these fixes propagate.
+
+- [x] **`config/phpstan/common.neon`** — added `reportUnmatchedIgnoredErrors:
+  false`. The shared `missingType.generics` / `missingType.iterableValue`
+  blanket ignores no longer fail PHPStan when a consuming package has nothing to
+  ignore. `composer phpstan` here is now **`[OK] No errors`**.
+- [x] **`composer.json`** — `phpunit/phpunit` `^12.0` → **`^13.0`** (installs
+  13.2.1; runs under PHP 8.5.7).
+- [x] **`phpunit.xml.dist`** — schema bumped `12.2` → `13.2`.
+
+Tests: **109 tests, 203 assertions, 0 issues** under PHPUnit 13.2.1 / PHP 8.5.7.
 
 > **This package matters most.** `ctw/ctw-qa` ships the shared QA configuration
 > (`config/phpstan/common.neon`, ECS, Rector sets) that **every** other `ctw/*`

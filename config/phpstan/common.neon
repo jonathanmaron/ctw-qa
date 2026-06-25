@@ -1,5 +1,6 @@
 parameters:
     level: max
+    reportUnmatchedIgnoredErrors: false
     bootstrapFiles:
         - %currentWorkingDirectory%/vendor/autoload.php
     scanDirectories:
