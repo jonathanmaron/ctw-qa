@@ -1,120 +1,51 @@
-# PHP 8.5.7 Upgrade — `ctw/ctw-qa`
+# PHP 8.5.7 Migration — `ctw/ctw-qa`
 
 - **Branch:** `php85` (cut from `master`)
 - **Runtime:** PHP 8.3.31 → **8.5.7**
-- **Date:** 2026-06-25
-
-This is a **TODO list** of the changes required for this package to run cleanly
-under PHP 8.5.7. Boxes are intentionally left unchecked.
-
----
-
-## ✅ Applied on `php85`
-
-> Supersedes §3 below. This package is consumed by every other `ctw/*` package
-> via `ctw/ctw-qa: dev-php85`, so these fixes propagate.
-
-- [x] **`config/phpstan/common.neon`** — added `reportUnmatchedIgnoredErrors:
-  false`. The shared `missingType.generics` / `missingType.iterableValue`
-  blanket ignores no longer fail PHPStan when a consuming package has nothing to
-  ignore. `composer phpstan` here is now **`[OK] No errors`**.
-- [x] **`composer.json`** — `phpunit/phpunit` `^12.0` → **`^13.0`** (installs
-  13.2.1; runs under PHP 8.5.7).
-- [x] **`phpunit.xml.dist`** — schema bumped `12.2` → `13.2`.
-
-Tests: **109 tests, 203 assertions, 0 issues** under PHPUnit 13.2.1 / PHP 8.5.7.
+- **PHPUnit:** 12 → **13.2.1**
+- **Status:** ✅ done
 
 > **This package matters most.** `ctw/ctw-qa` ships the shared QA configuration
 > (`config/phpstan/common.neon`, ECS, Rector sets) that **every** other `ctw/*`
-> package includes. The PHPStan issue below is therefore the root cause of the
-> identical PHPStan failures reported in the other packages' `UPDATE.md` files.
-> Fix it here first.
+> package consumes via `ctw/ctw-qa: dev-php85`, so the PHPStan fix below
+> propagates to all of them.
 
-Detection commands used:
+## Audit checklist
+
+### `config/phpstan/common.neon`
+
+- [x] **(tooling) `config/phpstan/common.neon`** — under PHPStan 2.2 the blanket
+  `ignoreErrors` entries for `missingType.generics` / `missingType.iterableValue`
+  fail with `Ignored error pattern ... was not matched in reported errors`
+  whenever a consuming package has nothing to ignore (the common case), so
+  `composer phpstan` / `composer qa` exit non-zero.
+  - **Fix:** added `reportUnmatchedIgnoredErrors: false` so the project-wide
+    blanket ignores are tolerated when unused. Restores green across this package
+    and every downstream `ctw/*` package.
+
+### Runtime
+
+- [x] **(none)** — no runtime deprecations, warnings, or notices. The suite runs
+  clean under PHP 8.5.7.
+
+## composer.json & CI
+
+- [x] **`require.php`** — `^8.3` → **`^8.5`**.
+- [x] **`phpunit/phpunit`** — `^12.0` → **`^13.0`** (installs 13.2.1).
+- [x] **`phpunit.xml.dist`** — schema bumped `12.2` → **`13.2`**.
+- [x] **`.github/workflows/tests.yml`** — CI matrix pinned to PHP **`8.5`** only.
+
+## Final audit (PHP 8.5.7)
+
+- [x] **`php -v`** — PHP **8.5.7** (cli).
+- [x] **`composer update -W`** — clean; no dependency blocked by the PHP 8.5
+  platform requirement.
+- [x] **PHPUnit** — **109 tests, 203 assertions**, no issues (PHPUnit 13.2.1).
+- [x] **PHPStan** — `[OK] No errors` (level max).
 
 ```bash
-composer update -W
-php vendor/bin/phpunit --no-coverage --display-deprecations --display-warnings --display-notices --display-errors
-composer rector      # rector --dry-run
-composer phpstan
+php -v                                  # PHP 8.5.7
+composer update -W                      # clean
+php vendor/bin/phpunit --no-coverage    # OK (109 tests, 203 assertions)
+composer phpstan                        # No issues found
 ```
-
----
-
-## 1. `composer update -W`
-
-✅ **Succeeded.** No dependency was blocked by an incompatible PHP 8.5 platform
-requirement.
-
-Notable upgrades:
-
-| Package | From | To |
-| --- | --- | --- |
-| `phpstan/phpstan` | 2.1.54 | 2.2.2 |
-| `phpunit/phpunit` | 12.5.25 | 12.5.30 |
-| `rector/rector` | 2.4.3 | 2.5.2 |
-| `symplify/easy-coding-standard` | 13.1.3 | 13.2.3 |
-
-`composer.lock` is git-ignored, so the update produces no committed diff — only
-this report is committed on the `php85` branch.
-
----
-
-## 2. PHP 8.5 runtime issues (must fix)
-
-- **None.** The test suite runs clean under PHP 8.5.7 — 109 tests, 203
-  assertions, no deprecations / warnings / notices.
-
----
-
-## 3. QA tooling issues (surfaced by the dependency update) — **fix here, affects all packages**
-
-- [ ] **`config/phpstan/common.neon:15-19`** — PHPStan **2.2** is stricter about
-  unmatched ignore patterns (`reportUnmatchedIgnoredErrors` defaults to `true`).
-  The shared `ignoreErrors` entries
-
-  ```neon
-  ignoreErrors:
-      - identifier: missingType.generics
-      - identifier: missingType.iterableValue
-  ```
-
-  now raise `Ignored error pattern missingType.generics was not matched in
-  reported errors.` whenever a consuming package has no missing-generics error
-  to ignore (which is the common case). PHPStan exits non-zero (`composer
-  phpstan` / `composer qa` fail).
-
-  **Fix options (decide in step 2):**
-  1. Add `reportUnmatchedIgnoredErrors: false` to `common.neon` so these
-     "blanket" ignores are tolerated when unused — simplest, restores green
-     across all packages; or
-  2. Convert the two entries to non-failing form, e.g.
-     `treatPhpDocTypesAsCertain`/`reportUnmatched*` per-identifier handling; or
-  3. Drop the blanket ignores and let each package carry its own.
-
-  Option 1 is recommended because the patterns are intended as project-wide
-  blanket suppressions.
-
----
-
-## 4. Notes (non-blocking, not PHP 8.5 specific)
-
-- Running `php vendor/bin/phpunit` with the project config can report
-  **"No tests executed!"** locally because `phpunit.xml.dist` configures a
-  `<coverage>` report but no coverage driver (Xdebug/PCOV) is installed on this
-  machine. Use `--no-coverage` locally; CI has a driver. Not a PHP 8.5
-  regression.
-
----
-
-## 5. Verification snapshot (current state on `php85`)
-
-| Check | Result |
-| --- | --- |
-| `composer update -W` | ✅ clean |
-| PHPUnit (`--no-coverage`) | ✅ 109 tests, 203 assertions, 0 issues |
-| Rector (dry-run) | ✅ no changes proposed |
-| PHPStan | ❌ 1 error (unmatched ignore pattern, see §3) |
-
-Once §3 is addressed this package — and the shared config it exports — is green
-under PHP 8.5.7.
