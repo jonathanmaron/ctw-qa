@@ -27,8 +27,8 @@ final class DefaultSetsTest extends TestCase
     public function testInvokeReturnsExpectedSetsInSourceOrder(): void
     {
         $expected = [
-            LevelSetList::UP_TO_PHP_83,
-            PHPUnitSetList::PHPUNIT_100,
+            LevelSetList::UP_TO_PHP_85,
+            PHPUnitSetList::PHPUNIT_120,
             SetList::CODE_QUALITY,
             SetList::CODING_STYLE,
             SetList::DEAD_CODE,
@@ -61,23 +61,23 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation includes the UP_TO_PHP_83 level set.
+     * Test that invocation includes the UP_TO_PHP_85 level set.
      */
-    public function testInvokeIncludesUpToPhp83LevelSet(): void
+    public function testInvokeIncludesUpToPhp85LevelSet(): void
     {
         $actual = ($this->defaultSets)();
 
-        self::assertContains(LevelSetList::UP_TO_PHP_83, $actual);
+        self::assertContains(LevelSetList::UP_TO_PHP_85, $actual);
     }
 
     /**
-     * Test that invocation includes the PHPUNIT_100 set.
+     * Test that invocation includes the PHPUNIT_120 set.
      */
-    public function testInvokeIncludesPhpunit100Set(): void
+    public function testInvokeIncludesPhpunit120Set(): void
     {
         $actual = ($this->defaultSets)();
 
-        self::assertContains(PHPUnitSetList::PHPUNIT_100, $actual);
+        self::assertContains(PHPUnitSetList::PHPUNIT_120, $actual);
     }
 
     /**
