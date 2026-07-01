@@ -1,10 +1,7 @@
 # Package "ctw/ctw-qa"
 
 [![Latest Stable Version](https://poser.pugx.org/ctw/ctw-qa/v/stable)](https://packagist.org/packages/ctw/ctw-qa)
-[![GitHub Actions](https://github.com/jonathanmaron/ctw-qa/actions/workflows/tests.yml/badge.svg)](https://github.com/jonathanmaron/ctw-qa/actions/workflows/tests.yml)
-[![Scrutinizer Build](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/badges/build.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/build-status/master)
-[![Scrutinizer Quality](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jonathanmaron/ctw-qa/?branch=master)
+[![GitHub Actions](https://github.com/jonathanmaron/ctw-qa/actions/workflows/ci.yml/badge.svg)](https://github.com/jonathanmaron/ctw-qa/actions/workflows/ci.yml)
 
 Centralized, opinionated configuration for PHP 8.3+ quality assurance tools: Rector, Easy Coding Standard (ECS), and PHPStan.
 
