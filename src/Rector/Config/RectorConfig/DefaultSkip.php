@@ -24,7 +24,7 @@ class DefaultSkip
         $upToPhp81 = [NullToStrictStringFuncCallArgRector::class];
 
         /**
-         * Rules defined in PHPUnitSetList::PHPUNIT_100 that should be skipped
+         * Rules defined in PHPUnitSetList::PHPUNIT_120 that should be skipped
          */
         $phpunit120 = [];
 
