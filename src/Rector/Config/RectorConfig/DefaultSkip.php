@@ -26,7 +26,7 @@ class DefaultSkip
         /**
          * Rules defined in PHPUnitSetList::PHPUNIT_100 that should be skipped
          */
-        $phpunit100 = [];
+        $phpunit120 = [];
 
         /**
          * Rules defined in SetList::CODE_QUALITY that should be skipped
@@ -57,7 +57,7 @@ class DefaultSkip
         return [
             ...$project,
             ...$upToPhp81,
-            ...$phpunit100,
+            ...$phpunit120,
             ...$codeQuality,
             ...$codingStyle,
             ...$deadCode,
