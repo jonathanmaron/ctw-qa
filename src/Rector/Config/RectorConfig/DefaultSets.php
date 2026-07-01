@@ -15,8 +15,8 @@ class DefaultSets
     public function __invoke(): array
     {
         return [
-            LevelSetList::UP_TO_PHP_83,
-            PHPUnitSetList::PHPUNIT_100,
+            LevelSetList::UP_TO_PHP_85,
+            PHPUnitSetList::PHPUNIT_120,
             SetList::CODE_QUALITY,
             SetList::CODING_STYLE,
             SetList::DEAD_CODE,
