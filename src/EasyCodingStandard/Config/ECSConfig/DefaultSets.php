@@ -12,6 +12,6 @@ class DefaultSets
      */
     public function __invoke(): array
     {
-        return [SetList::CLEAN_CODE, SetList::COMMON, SetList::PSR_12, SetList::SYMPLIFY];
+        return [SetList::CLEAN_CODE, SetList::COMMON, SetList::PSR_12];
     }
 }

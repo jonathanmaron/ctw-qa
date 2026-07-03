@@ -24,7 +24,7 @@ final class DefaultSetsTest extends TestCase
      */
     public function testInvokeReturnsExpectedSetsInSourceOrder(): void
     {
-        $expected = [SetList::CLEAN_CODE, SetList::COMMON, SetList::PSR_12, SetList::SYMPLIFY];
+        $expected = [SetList::CLEAN_CODE, SetList::COMMON, SetList::PSR_12];
 
         $actual = ($this->defaultSets)();
 
@@ -42,13 +42,13 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly four sets after the STRICT deprecation removal.
+     * Test that invocation returns exactly three sets after the SYMPLIFY deprecation removal.
      */
-    public function testInvokeReturnsExactlyFourSets(): void
+    public function testInvokeReturnsExactlyThreeSets(): void
     {
         $actual = ($this->defaultSets)();
 
-        self::assertCount(4, $actual);
+        self::assertCount(3, $actual);
     }
 
     /**
@@ -82,23 +82,13 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation excludes the STRICT set, since ECS 13.1.x throws on load when it is included.
+     * Test that invocation excludes the SYMPLIFY set, since its rules moved to the COMMON sets and it now only triggers a deprecation.
      */
-    public function testInvokeExcludesStrictSet(): void
+    public function testInvokeExcludesSymplifySet(): void
     {
         $actual = ($this->defaultSets)();
 
-        self::assertNotContains(SetList::STRICT, $actual);
-    }
-
-    /**
-     * Test that invocation includes the SYMPLIFY set.
-     */
-    public function testInvokeIncludesSymplifySet(): void
-    {
-        $actual = ($this->defaultSets)();
-
-        self::assertContains(SetList::SYMPLIFY, $actual);
+        self::assertNotContains(SetList::SYMPLIFY, $actual);
     }
 
     /**
