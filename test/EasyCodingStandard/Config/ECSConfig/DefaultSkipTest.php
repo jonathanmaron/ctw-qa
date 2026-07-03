@@ -6,11 +6,13 @@ namespace CtwTest\Qa\EasyCodingStandard\Config\ECSConfig;
 
 use Ctw\Qa\EasyCodingStandard\Config\ECSConfig\DefaultSkip;
 use PhpCsFixer\Fixer\Basic\BracesFixer;
+use PhpCsFixer\Fixer\ClassNotation\NoBlankLinesAfterClassOpeningFixer;
 use PhpCsFixer\Fixer\Comment\NoTrailingWhitespaceInCommentFixer;
 use PhpCsFixer\Fixer\FunctionNotation\FunctionDeclarationFixer;
 use PhpCsFixer\Fixer\Operator\BinaryOperatorSpacesFixer;
 use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
+use PhpCsFixer\Fixer\Whitespace\NoExtraBlankLinesFixer;
 use PhpCsFixer\Fixer\Whitespace\StatementIndentationFixer;
 use PHPUnit\Framework\TestCase;
 
@@ -84,6 +86,17 @@ final class DefaultSkipTest extends TestCase
         self::assertArrayHasKey(StatementIndentationFixer::class, $actual);
         self::assertIsArray($actual[StatementIndentationFixer::class]);
         self::assertSame(['*.phtml'], $actual[StatementIndentationFixer::class]);
+    }
+
+    /**
+     * Test that invocation includes the personal-preference skipped rules, the fourth curated skip category.
+     */
+    public function testInvokeIncludesPersonalPreferenceRules(): void
+    {
+        $actual = ($this->defaultSkip)();
+
+        self::assertContains(NoBlankLinesAfterClassOpeningFixer::class, $actual);
+        self::assertContains(NoExtraBlankLinesFixer::class, $actual);
     }
 
     /**
