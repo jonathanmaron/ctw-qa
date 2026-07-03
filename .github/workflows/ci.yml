@@ -11,12 +11,16 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                php: [ '8.5' ]
+                # 8.4 is the lowest supported PHP: the dev toolchain (PHPUnit 13)
+                # requires PHP >= 8.4.1, so 8.1-8.3 cannot run the suite even
+                # though the runtime code is simpler. Each version is exercised
+                # against both the lowest and highest allowed dependency sets.
+                php: [ '8.4', '8.5' ]
                 dependencies: [ highest, lowest ]
                 include:
-                    # Forward-looking, non-blocking signal against the next PHP.
-                    # This plugin exists to smooth installs on newer PHP, so an
-                    # early-warning leg against the upcoming release fits its purpose.
+                    # Forward-looking, non-blocking signal against the next PHP,
+                    # so regressions on the upcoming release surface early without
+                    # blocking the build.
                     -   php: '8.6'
                         dependencies: highest
                         experimental: true
