@@ -7,7 +7,6 @@ use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
-use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 
 class DefaultSkip
 {
@@ -21,7 +20,7 @@ class DefaultSkip
         /**
          * Rules defined in LevelSetList::UP_TO_PHP_81 that should be skipped
          */
-        $upToPhp81 = [NullToStrictStringFuncCallArgRector::class];
+        $upToPhp81 = [];
 
         /**
          * Rules defined in PHPUnitSetList::PHPUNIT_120 that should be skipped

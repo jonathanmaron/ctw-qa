@@ -10,7 +10,6 @@ use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
-use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 
 final class DefaultSkipTest extends TestCase
 {
@@ -49,16 +48,6 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation includes UP_TO_PHP_81 skipped rules.
-     */
-    public function testInvokeIncludesUpToPhp81SkippedRules(): void
-    {
-        $actual = ($this->defaultSkip)();
-
-        self::assertContains(NullToStrictStringFuncCallArgRector::class, $actual);
-    }
-
-    /**
      * Test that invocation includes NAMING skipped rules.
      */
     public function testInvokeIncludesNamingSkippedRules(): void
@@ -93,13 +82,13 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly the curated 11 skip entries (6 project + 1 PHP-81 + 1 coding-style + 3 naming).
+     * Test that invocation returns exactly the curated 10 skip entries (6 project + 1 coding-style + 3 naming).
      */
-    public function testInvokeReturnsElevenSkipEntries(): void
+    public function testInvokeReturnsTenSkipEntries(): void
     {
         $actual = ($this->defaultSkip)();
 
-        self::assertCount(11, $actual);
+        self::assertCount(10, $actual);
     }
 
     /**
