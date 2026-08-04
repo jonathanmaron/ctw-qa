@@ -18,9 +18,9 @@ class DefaultSkip
         $project = ['*/build/*', '*/compiled/*', '*/doc/*', '*/docs/*', '*/node_modules/*', '*/vendor/*'];
 
         /**
-         * Rules defined in LevelSetList::UP_TO_PHP_81 that should be skipped
+         * Rules defined in LevelSetList::UP_TO_PHP_85 that should be skipped
          */
-        $upToPhp81 = [];
+        $upToPhp85 = [];
 
         /**
          * Rules defined in PHPUnitSetList::PHPUNIT_120 that should be skipped
@@ -55,7 +55,7 @@ class DefaultSkip
 
         return [
             ...$project,
-            ...$upToPhp81,
+            ...$upToPhp85,
             ...$phpunit120,
             ...$codeQuality,
             ...$codingStyle,
