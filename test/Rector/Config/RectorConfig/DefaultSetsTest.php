@@ -28,7 +28,7 @@ final class DefaultSetsTest extends TestCase
     {
         $expected = [
             LevelSetList::UP_TO_PHP_85,
-            PHPUnitSetList::PHPUNIT_120,
+            PHPUnitSetList::COMPOSER_BASED,
             SetList::CODE_QUALITY,
             SetList::CODING_STYLE,
             SetList::DEAD_CODE,
@@ -71,13 +71,13 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation includes the PHPUNIT_120 set.
+     * Test that invocation includes the COMPOSER_BASED set.
      */
-    public function testInvokeIncludesPhpunit120Set(): void
+    public function testInvokeIncludesComposerBasedSet(): void
     {
         $actual = ($this->defaultSets)();
 
-        self::assertContains(PHPUnitSetList::PHPUNIT_120, $actual);
+        self::assertContains(PHPUnitSetList::COMPOSER_BASED, $actual);
     }
 
     /**

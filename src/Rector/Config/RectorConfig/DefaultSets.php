@@ -16,7 +16,7 @@ class DefaultSets
     {
         return [
             LevelSetList::UP_TO_PHP_85,
-            PHPUnitSetList::PHPUNIT_120,
+            PHPUnitSetList::COMPOSER_BASED,
             SetList::CODE_QUALITY,
             SetList::CODING_STYLE,
             SetList::DEAD_CODE,
