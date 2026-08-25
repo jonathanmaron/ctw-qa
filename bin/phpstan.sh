@@ -19,6 +19,13 @@ readonly SEPARATOR_SHORT="━━━━━━━━━━━━━━━━━━
 readonly LABEL_WIDTH=42
 
 #######################################
+# Globals
+#######################################
+
+# Exit code of the PHPStan run, set by run_phpstan() and propagated by main().
+phpstan_exit_code=0
+
+#######################################
 # Prints an error message to stderr.
 # Arguments:
 #   Error message string
@@ -31,26 +38,39 @@ err() {
 # Runs PHPStan and generates JSON output.
 # Globals:
 #   INPUT_FILE
+#   phpstan_exit_code
 # Notes:
-#   PHPStan returns non-zero exit code when errors are found,
-#   which is expected behavior - we capture output regardless.
+#   PHPStan returns a non-zero exit code when errors are found. The code is
+#   recorded rather than discarded, so that the grouped report is still
+#   generated and main() can propagate the failure to the caller.
 #######################################
 run_phpstan() {
   echo ""
   vendor/bin/phpstan --version
   echo ""
-  vendor/bin/phpstan --error-format=json >"${INPUT_FILE}" || true
+  vendor/bin/phpstan --error-format=json >"${INPUT_FILE}" \
+    || phpstan_exit_code=$?
 }
 
 #######################################
 # Pretty-formats the JSON result file in place.
 # Globals:
 #   INPUT_FILE
+#   phpstan_exit_code
+# Exits:
+#   Non-zero if PHPStan did not produce parsable JSON.
 #######################################
 format_json() {
   local temp_file="${INPUT_FILE}.tmp"
 
-  jq . "${INPUT_FILE}" >"${temp_file}" && mv "${temp_file}" "${INPUT_FILE}"
+  if ! jq . "${INPUT_FILE}" >"${temp_file}" 2>/dev/null; then
+    rm -f "${temp_file}"
+    err "PHPStan did not produce valid JSON output."
+    cat "${INPUT_FILE}" >&2
+    exit $((phpstan_exit_code > 0 ? phpstan_exit_code : 1))
+  fi
+
+  mv "${temp_file}" "${INPUT_FILE}"
 }
 
 #######################################
@@ -164,6 +184,13 @@ generate_summary() {
 
 #######################################
 # Main entry point.
+# Globals:
+#   OUTPUT_DIR
+#   SUMMARY_FILE
+#   phpstan_exit_code
+# Exits:
+#   The exit code of the PHPStan run, so that callers such as CI pipelines
+#   fail when errors were reported.
 #######################################
 main() {
 
@@ -174,7 +201,7 @@ main() {
   format_json
 
   if ! validate_json; then
-    exit 0
+    exit "${phpstan_exit_code}"
   fi
 
   group_errors_by_identifier
@@ -183,6 +210,8 @@ main() {
 
   echo ""
   cat "${SUMMARY_FILE}"
+
+  exit "${phpstan_exit_code}"
 }
 
 main "$@"
