@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/ctw/ctw-qa/v/stable)](https://packagist.org/packages/ctw/ctw-qa)
 [![GitHub Actions](https://github.com/jonathanmaron/ctw-qa/actions/workflows/ci.yml/badge.svg)](https://github.com/jonathanmaron/ctw-qa/actions/workflows/ci.yml)
 
-Centralized, opinionated configuration for PHP 8.3+ quality assurance tools: Rector, Easy Coding Standard (ECS), and PHPStan.
+Centralized, opinionated configuration for PHP 8.3+ quality assurance tools: Rector, Easy Coding Standard (ECS), PHPStan, and Composer Unused.
 
 ## Introduction
 
@@ -14,6 +14,7 @@ Setting up quality assurance tools properly is tedious and error-prone. Each pro
 - **Rector** for code modernization (100+ lines of configuration)
 - **Easy Coding Standard** for style enforcement (150+ lines)
 - **PHPStan** for static analysis (50+ lines)
+- **Composer Unused** for dependency hygiene (30+ lines)
 
 Multiplied across numerous projects, this becomes a maintenance burden. Configurations drift, standards diverge, and teams waste time debugging tool setups instead of writing code.
 
@@ -46,7 +47,7 @@ This library provides:
 1. **Opinionated defaults**: Strong opinions for modern PHP, easily overridable
 2. **Invokable classes**: Simple `$config()` syntax for integration
 3. **Maximum strictness**: PHPStan level `max`, strict comparisons, strict types
-4. **Minimal dependencies**: Only the three QA tools themselves
+4. **Minimal dependencies**: Only the four QA tools themselves
 5. **Extensible**: All configuration classes designed for inheritance
 
 ## Requirements
@@ -150,6 +151,62 @@ parameters:
         - vendor/autoload.php
 ```
 
+### Composer Unused Configuration
+
+Create `composer-unused.php` in your project root:
+
+```php
+<?php
+declare(strict_types=1);
+
+use ComposerUnused\ComposerUnused\Configuration\Configuration;
+use ComposerUnused\ComposerUnused\Configuration\NamedFilter;
+use ComposerUnused\ComposerUnused\Configuration\PatternFilter;
+use Ctw\Qa\ComposerUnused\Configuration\Configuration\DefaultNamedFilters;
+use Ctw\Qa\ComposerUnused\Configuration\Configuration\DefaultPatternFilters;
+
+return static function (Configuration $configuration): Configuration {
+    $namedFilters   = new DefaultNamedFilters();
+    $patternFilters = new DefaultPatternFilters();
+
+    foreach ($namedFilters() as $namedFilter) {
+        $configuration->addNamedFilter(NamedFilter::fromString($namedFilter));
+    }
+
+    foreach ($patternFilters() as $patternFilter) {
+        $configuration->addPatternFilter(PatternFilter::fromString($patternFilter));
+    }
+
+    // Replace with your own package name, which is the key Composer Unused
+    // looks additional files up by.
+    $configuration->setAdditionalFilesFor('vendor/package', [__FILE__]);
+
+    return $configuration;
+};
+```
+
+Composer Unused decides that a package is used by matching the symbols in your
+source against the namespaces each package provides. It has two ways to handle
+a dependency that never shows up in a scan, and this library uses both.
+
+**Prove it, where the package publishes a namespace.** Composer Unused itself
+does, and the configuration file above references it, so pointing the scan at
+that file reports the package as genuinely used. `setAdditionalFilesFor()` is
+keyed on your own root package name, not on the dependency, so give it the
+`name` from your `composer.json`. Use the same mechanism for any dependency
+your project touches only from a root-level script or configuration file.
+
+**Filter it, where the package publishes nothing.** ECS, Rector and PHPStan
+ship namespace-prefixed builds and declare a `files` autoload with no namespace
+at all, which `composer-unused debug:provided-symbols symplify/easy-coding-standard`
+confirms by printing nothing. No file can prove a dependency the scanner cannot
+see, so a filter is the only option. The PHPStan extensions do publish
+`PHPStan\`, but are wired up through `phpstan.neon` rather than referenced in
+code, and need a filter for the same practical reason.
+
+These packages are not unused. `Ignored` is simply the only word Composer
+Unused has for "depended on, but invisible to a symbol scan".
+
 ### Composer Scripts
 
 Add to your `composer.json`:
@@ -157,13 +214,14 @@ Add to your `composer.json`:
 ```json
 {
     "scripts": {
-        "qa": ["@rector", "@ecs", "@phpstan"],
-        "qa-fix": ["@rector-fix", "@ecs-fix", "@phpstan"],
+        "qa": ["@rector", "@ecs", "@phpstan", "@composer-unused"],
+        "qa-fix": ["@rector-fix", "@ecs-fix", "@phpstan", "@composer-unused"],
         "rector": "vendor/bin/rector process --dry-run",
         "rector-fix": "vendor/bin/rector process",
         "ecs": "vendor/bin/ecs",
         "ecs-fix": "vendor/bin/ecs --fix",
-        "phpstan": "vendor/bin/phpstan analyse"
+        "phpstan": "vendor/bin/phpstan analyse",
+        "composer-unused": "vendor/bin/composer-unused --no-progress"
     }
 }
 ```
@@ -206,6 +264,17 @@ composer qa-fix    # Auto-fix everything possible
 - Level: `max` (strictest)
 - Strict rules enabled
 - PHPUnit extension included
+
+### Composer Unused (Dependency Hygiene)
+
+| Filter | Description |
+|--------|-------------|
+| `symplify/easy-coding-standard` | Prefixed build, publishes no namespace |
+| `/^phpstan\/.*/` | PHPStan publishes no namespace; its extensions are wired through `phpstan.neon` |
+| `/^rector\/.*/` | Rector publishes no namespace; its rule packages are wired through sets |
+
+`icanhazstring/composer-unused` is deliberately absent: it publishes a
+namespace, so `composer-unused.php` proves it used instead.
 
 ---
 
