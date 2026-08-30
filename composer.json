@@ -36,7 +36,7 @@
         "sort-packages": true
     },
     "scripts": {
-        "composer-unused": "php vendor/bin/composer-unused --no-progress",
+        "composer-unused": "php vendor/bin/composer-unused",
         "ecs": "php vendor/bin/ecs --clear-cache",
         "ecs-fix": "php vendor/bin/ecs --clear-cache --fix",
         "phpstan": "bash bin/phpstan.sh",
