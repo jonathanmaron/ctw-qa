@@ -5,6 +5,7 @@
     "type": "library",
     "require": {
         "php": "^8.4",
+        "icanhazstring/composer-unused": "^0.9.6",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
@@ -35,6 +36,7 @@
         "sort-packages": true
     },
     "scripts": {
+        "composer-unused": "php vendor/bin/composer-unused --no-progress",
         "ecs": "php vendor/bin/ecs --clear-cache",
         "ecs-fix": "php vendor/bin/ecs --clear-cache --fix",
         "phpstan": "bash bin/phpstan.sh",
@@ -42,12 +44,14 @@
         "qa": [
             "@rector",
             "@ecs",
-            "@phpstan"
+            "@phpstan",
+            "@composer-unused"
         ],
         "qa-fix": [
             "@rector-fix",
             "@ecs-fix",
-            "@phpstan"
+            "@phpstan",
+            "@composer-unused"
         ],
         "rector": "php vendor/bin/rector process --clear-cache --dry-run",
         "rector-fix": "php vendor/bin/rector process --clear-cache",
