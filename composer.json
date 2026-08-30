@@ -42,16 +42,16 @@
         "phpstan": "bash bin/phpstan.sh",
         "phpstan-baseline": "bash bin/phpstan-baseline.sh",
         "qa": [
+            "@composer-unused",
             "@rector",
             "@ecs",
-            "@phpstan",
-            "@composer-unused"
+            "@phpstan"
         ],
         "qa-fix": [
+            "@composer-unused",
             "@rector-fix",
             "@ecs-fix",
-            "@phpstan",
-            "@composer-unused"
+            "@phpstan"
         ],
         "rector": "php vendor/bin/rector process --clear-cache --dry-run",
         "rector-fix": "php vendor/bin/rector process --clear-cache",
