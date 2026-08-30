@@ -111,9 +111,7 @@ final class DefaultSkipTest extends TestCase
     public function testInvokeProjectDirectoryPatternsUseWildcardFormat(): void
     {
         $actual             = ($this->defaultSkip)();
-        $projectDirectories = array_filter($actual, static function (mixed $value): bool {
-            return is_string($value) && str_starts_with($value, '*/') && str_ends_with($value, '/*');
-        });
+        $projectDirectories = array_filter($actual, static fn(mixed $value): bool => is_string($value) && str_starts_with($value, '*/') && str_ends_with($value, '/*'));
 
         self::assertCount(6, $projectDirectories);
     }

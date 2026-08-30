@@ -140,9 +140,7 @@ final class DefaultSkipTest extends TestCase
     public function testInvokeProjectDirectoryPatternsUseWildcardFormat(): void
     {
         $actual             = ($this->defaultSkip)();
-        $projectDirectories = array_filter($actual, static function (mixed $value): bool {
-            return is_string($value) && str_starts_with($value, '*/') && str_ends_with($value, '/*');
-        });
+        $projectDirectories = array_filter($actual, static fn(mixed $value): bool => is_string($value) && str_starts_with($value, '*/') && str_ends_with($value, '/*'));
 
         self::assertCount(6, $projectDirectories);
     }
@@ -153,10 +151,8 @@ final class DefaultSkipTest extends TestCase
     public function testInvokeFixerClassNamesUsePhpCsFixerNamespace(): void
     {
         $actual       = ($this->defaultSkip)();
-        $stringValues = array_filter($actual, static fn (mixed $value): bool => is_string($value));
-        $fixerClasses = array_filter($stringValues, static function (string $value): bool {
-            return str_contains($value, '\\Fixer\\');
-        });
+        $stringValues = array_filter($actual, is_string(...));
+        $fixerClasses = array_filter($stringValues, static fn(string $value): bool => str_contains($value, '\\Fixer\\'));
 
         self::assertCount(8, $fixerClasses);
 
