@@ -230,6 +230,18 @@ configuration class naming a fixer therefore references a class that resolves at
 runtime and is unknown to the analyser, and `ignoreUnknownClassesRegex()`
 excludes the two namespaces wholesale.
 
+One pattern covers both, and it has to. ECS's `bootstrap.php` is autoloaded
+eagerly but registers a *lazy* autoloader that acts only on a class named
+`Symplify\…` or `ECSPrefix…`; the first such class requested makes it load the
+nested `vendor/autoload.php`, and from that point `PhpCsFixer\…` resolves and
+is attributed to `symplify/easy-coding-standard` instead of being unknown.
+`PHP_CodeSniffer\…` stays unknown either way, being prefixed in that tree. So
+whether the fixers are unknown depends on whether a `Symplify\` symbol was
+scanned before them, which differs between one filesystem and the next. Split
+across two patterns, the fixer one goes unmatched wherever the sniffs are
+scanned last — and since an unmatched ignore is itself an error, the check
+would pass locally and fail in CI. Joined, the sniffs alone match it.
+
 Exclusions that never fire are reported in their own right, so treat the
 defaults as a starting point: a project with no PHPStan extension installed is
 told that the entry for it matched nothing.
@@ -300,8 +312,7 @@ composer qa-fix    # Auto-fix everything possible
 | `phpstan/phpstan` | Prefixed PHAR, configured through `phpstan.neon` rather than from code |
 | `phpstan/phpstan-phpunit` | Wired through `phpstan.neon` rather than referenced in code |
 | `phpstan/phpstan-strict-rules` | Wired through `phpstan.neon` rather than referenced in code |
-| `/^PHP_CodeSniffer\\/` | Sniffs bundled inside the ECS vendor tree, unknown to the analyser |
-| `/^PhpCsFixer\\/` | Fixers bundled inside the ECS vendor tree, unknown to the analyser |
+| `/^(PHP_CodeSniffer\|PhpCsFixer)\\/` | Sniffs and fixers bundled inside the ECS vendor tree, unknown to the analyser |
 
 Only `UNUSED_DEPENDENCY` is excluded per package, so every other kind of error
 is still reported for them. `rector/rector`,

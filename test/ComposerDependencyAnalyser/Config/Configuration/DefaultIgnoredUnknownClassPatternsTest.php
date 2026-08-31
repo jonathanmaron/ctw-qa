@@ -24,8 +24,7 @@ final class DefaultIgnoredUnknownClassPatternsTest extends TestCase
     public function testInvokeReturnsExpectedPatternsInSourceOrder(): void
     {
         $expected = [
-            '/^PHP_CodeSniffer\\\\/',
-            '/^PhpCsFixer\\\\/',
+            '/^(PHP_CodeSniffer|PhpCsFixer)\\\\/',
         ];
 
         $actual = ($this->defaultIgnoredUnknownClassPatterns)();
@@ -44,13 +43,18 @@ final class DefaultIgnoredUnknownClassPatternsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly two patterns, pinning the curated pattern count.
+     * Test that invocation returns exactly one pattern, pinning the curated pattern count.
+     *
+     * The two namespaces share a pattern on purpose: Easy Coding Standard's lazy autoloader makes
+     * the fixers resolvable once any "Symplify\\" class has been requested, so as a pattern of its
+     * own the fixer one goes unmatched wherever the sniffs are scanned last, and an ignore that
+     * never applies is itself an error.
      */
-    public function testInvokeReturnsExactlyTwoPatterns(): void
+    public function testInvokeReturnsExactlyOnePattern(): void
     {
         $actual = ($this->defaultIgnoredUnknownClassPatterns)();
 
-        self::assertCount(2, $actual);
+        self::assertCount(1, $actual);
     }
 
     /**
@@ -86,8 +90,8 @@ final class DefaultIgnoredUnknownClassPatternsTest extends TestCase
     {
         $actual = ($this->defaultIgnoredUnknownClassPatterns)();
 
-        self::assertMatchesRegularExpression($actual[1], 'PhpCsFixer\Fixer\FixerInterface');
-        self::assertMatchesRegularExpression($actual[1], 'PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer');
+        self::assertMatchesRegularExpression($actual[0], 'PhpCsFixer\Fixer\FixerInterface');
+        self::assertMatchesRegularExpression($actual[0], 'PhpCsFixer\Fixer\Strict\DeclareStrictTypesFixer');
     }
 
     /**
@@ -112,7 +116,7 @@ final class DefaultIgnoredUnknownClassPatternsTest extends TestCase
         $actual = ($this->defaultIgnoredUnknownClassPatterns)();
 
         self::assertDoesNotMatchRegularExpression($actual[0], 'PHP_CodeSnifferExtra\Sniff');
-        self::assertDoesNotMatchRegularExpression($actual[1], 'PhpCsFixerExtra\Fixer');
+        self::assertDoesNotMatchRegularExpression($actual[0], 'PhpCsFixerExtra\Fixer');
     }
 
     /**
