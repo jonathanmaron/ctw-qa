@@ -68,22 +68,6 @@ jobs:
             # green, move it into php_versions, where it blocks, and drop this.
             php_versions_canary: '["8.6"]'
 
-            # This package is configuration: its classes name the fixers,
-            # sniffs and rule sets that ECS and Rector are to run. Those
-            # classes are real and resolve at runtime, but they are not
-            # attributable to any declared dependency — ECS bundles
-            # friendsofphp/php-cs-fixer and squizlabs/php_codesniffer inside
-            # its own nested vendor tree rather than requiring them, and Rector
-            # does the same with its sets. The require checker reports some
-            # fifty of them as unknown symbols.
-            #
-            # Whitelisting them is the wrong trade. The list is not stable: it
-            # would have to grow every time a fixer is added to a config, so
-            # ordinary work here would fail the job until somebody remembered
-            # to update a JSON file. Every one of those failures would be a
-            # false positive.
-            composer_requirements: false
-
             # Every job is on by default. Uncomment to switch one off.
             #
             # phpunit: false
@@ -94,7 +78,6 @@ jobs:
             # composer_validate: false
             # composer_normalize: false
             # composer_audit: false
-            # composer_unused: false
+            # composer_dependencies: false
             # composer_outdated: false
             # backward_compatibility: false
-            # infection: true
