@@ -11,6 +11,7 @@
         "phpstan/phpstan-phpunit": "^2.0",
         "phpstan/phpstan-strict-rules": "^2.0",
         "rector/rector": "^2.6.0",
+        "shipmonk/composer-dependency-analyser": "^1.8.4",
         "symplify/easy-coding-standard": "^13.0"
     },
     "require-dev": {
@@ -36,18 +37,21 @@
         "sort-packages": true
     },
     "scripts": {
+        "composer-dependency-analyser": "php vendor/bin/composer-dependency-analyser",
         "composer-unused": "php vendor/bin/composer-unused",
         "ecs": "php vendor/bin/ecs --clear-cache",
         "ecs-fix": "php vendor/bin/ecs --clear-cache --fix",
         "phpstan": "bash bin/phpstan.sh",
         "phpstan-baseline": "bash bin/phpstan-baseline.sh",
         "qa": [
+            "@composer-dependency-analyser",
             "@composer-unused",
             "@rector",
             "@ecs",
             "@phpstan"
         ],
         "qa-fix": [
+            "@composer-dependency-analyser",
             "@composer-unused",
             "@rector-fix",
             "@ecs-fix",
