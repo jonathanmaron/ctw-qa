@@ -3,7 +3,7 @@
 [![Latest Stable Version](https://poser.pugx.org/ctw/ctw-qa/v/stable)](https://packagist.org/packages/ctw/ctw-qa)
 [![GitHub Actions](https://github.com/jonathanmaron/ctw-qa/actions/workflows/ci.yml/badge.svg)](https://github.com/jonathanmaron/ctw-qa/actions/workflows/ci.yml)
 
-Centralized, opinionated configuration for PHP 8.3+ quality assurance tools: Rector, Easy Coding Standard (ECS), PHPStan, and Composer Unused.
+Centralized, opinionated configuration for PHP 8.3+ quality assurance tools: Rector, Easy Coding Standard (ECS), PHPStan, Composer Unused, and Composer Dependency Analyser.
 
 ## Introduction
 
@@ -15,6 +15,7 @@ Setting up quality assurance tools properly is tedious and error-prone. Each pro
 - **Easy Coding Standard** for style enforcement (150+ lines)
 - **PHPStan** for static analysis (50+ lines)
 - **Composer Unused** for dependency hygiene (30+ lines)
+- **Composer Dependency Analyser** for shadow, unused and misplaced dependencies (30+ lines)
 
 Multiplied across numerous projects, this becomes a maintenance burden. Configurations drift, standards diverge, and teams waste time debugging tool setups instead of writing code.
 
@@ -47,7 +48,7 @@ This library provides:
 1. **Opinionated defaults**: Strong opinions for modern PHP, easily overridable
 2. **Invokable classes**: Simple `$config()` syntax for integration
 3. **Maximum strictness**: PHPStan level `max`, strict comparisons, strict types
-4. **Minimal dependencies**: Only the four QA tools themselves
+4. **Minimal dependencies**: Only the five QA tools themselves
 5. **Extensible**: All configuration classes designed for inheritance
 
 ## Requirements
@@ -207,6 +208,90 @@ code, and need a filter for the same practical reason.
 These packages are not unused. `Ignored` is simply the only word Composer
 Unused has for "depended on, but invisible to a symbol scan".
 
+### Composer Dependency Analyser Configuration
+
+Create `composer-dependency-analyser.php` in your project root:
+
+```php
+<?php
+declare(strict_types=1);
+
+use Ctw\Qa\ComposerDependencyAnalyser\Config\Configuration\DefaultFileExtensions;
+use Ctw\Qa\ComposerDependencyAnalyser\Config\Configuration\DefaultIgnoredPackageErrors;
+use Ctw\Qa\ComposerDependencyAnalyser\Config\Configuration\DefaultIgnoredUnknownClassPatterns;
+use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
+
+$fileExtensions       = new DefaultFileExtensions();
+$packageErrors        = new DefaultIgnoredPackageErrors();
+$unknownClassPatterns = new DefaultIgnoredUnknownClassPatterns();
+
+$configuration = new Configuration();
+
+$configuration->setFileExtensions($fileExtensions());
+
+foreach ($packageErrors() as $packageName => $errorTypes) {
+    $configuration->ignoreErrorsOnPackage($packageName, $errorTypes);
+}
+
+foreach ($unknownClassPatterns() as $unknownClassPattern) {
+    $configuration->ignoreUnknownClassesRegex($unknownClassPattern);
+}
+
+// The analyser scans the autoload paths of composer.json on its own, which
+// covers "src" and "test" but not the root of the project. Add whichever
+// root-level files reference a dependency, so that scanning them proves it.
+$configuration->addPathsToScan(
+    [
+        sprintf('%s/composer-dependency-analyser.php', __DIR__),
+        sprintf('%s/composer-unused.php', __DIR__),
+        sprintf('%s/ecs.php', __DIR__),
+        sprintf('%s/rector.php', __DIR__),
+    ],
+    false
+);
+
+return $configuration;
+```
+
+The file returns a `Configuration` object rather than a closure, and needs no
+`require` of `vendor/autoload.php` to reach the `Ctw\Qa` classes: the analyser
+loads the vendor directory belonging to the `composer.json` it is analysing
+before it reads the configuration.
+
+Composer Dependency Analyser answers a wider question than Composer Unused, and
+the two are complementary rather than alternatives. Beyond the declared
+dependency nothing uses, it reports the *shadow* dependency — a class used from
+a package your `composer.json` never declared, which arrives only because
+something else happens to require it — and the dependency declared in the wrong
+section of `composer.json`. It resolves a symbol back to the package that
+autoloads it, so the same choice applies as above — prove the dependency where
+a file can, exclude the error where none can.
+
+**Prove it, by scanning the file that references it.** The analyser scans the
+autoload paths from your `composer.json`, which leaves the project root out.
+`addPathsToScan()` puts the root-level configuration files back in, which is
+what proves the tools they configure. Pass `false` for `$isDev` when the tools
+are production requirements, `true` when they are development ones — the
+analyser reports a mismatch either way round.
+
+**Exclude the error, where the package is invisible to a symbol scan.** The
+PHPStan packages are wired up through `phpstan.neon` and named in no PHP file,
+so `ignoreErrorsOnPackage()` excludes `UNUSED_DEPENDENCY` for each of them.
+Unlike Composer Unused there is no pattern equivalent, so a PHPStan extension
+added to a project is named individually.
+
+**Exclude the unknown class, where it cannot be autoloaded.** ECS names its
+fixers and sniffs with the classes of `friendsofphp/php-cs-fixer` and
+`squizlabs/php_codesniffer` but requires neither, bundling both in a nested
+vendor tree behind an autoloader that is only registered once the tool boots. A
+configuration class naming a fixer therefore references a class that resolves at
+runtime and is unknown to the analyser, and `ignoreUnknownClassesRegex()`
+excludes the two namespaces wholesale.
+
+Exclusions that never fire are reported in their own right, so treat the
+defaults as a starting point: a project with no PHPStan extension installed is
+told that the entry for it matched nothing.
+
 ### Composer Scripts
 
 Add to your `composer.json`:
@@ -214,14 +299,15 @@ Add to your `composer.json`:
 ```json
 {
     "scripts": {
-        "qa": ["@rector", "@ecs", "@phpstan", "@composer-unused"],
-        "qa-fix": ["@rector-fix", "@ecs-fix", "@phpstan", "@composer-unused"],
+        "qa": ["@rector", "@ecs", "@phpstan", "@composer-unused", "@composer-dependency-analyser"],
+        "qa-fix": ["@rector-fix", "@ecs-fix", "@phpstan", "@composer-unused", "@composer-dependency-analyser"],
         "rector": "vendor/bin/rector process --dry-run",
         "rector-fix": "vendor/bin/rector process",
         "ecs": "vendor/bin/ecs",
         "ecs-fix": "vendor/bin/ecs --fix",
         "phpstan": "vendor/bin/phpstan analyse",
-        "composer-unused": "vendor/bin/composer-unused --no-progress"
+        "composer-unused": "vendor/bin/composer-unused --no-progress",
+        "composer-dependency-analyser": "vendor/bin/composer-dependency-analyser"
     }
 }
 ```
@@ -275,6 +361,22 @@ composer qa-fix    # Auto-fix everything possible
 
 `icanhazstring/composer-unused` is deliberately absent: it publishes a
 namespace, so `composer-unused.php` proves it used instead.
+
+### Composer Dependency Analyser (Dependency Hygiene)
+
+| Exclusion | Description |
+|-----------|-------------|
+| `phpstan/extension-installer` | Composer plugin, referenced from no PHP file |
+| `phpstan/phpstan` | Prefixed PHAR, configured through `phpstan.neon` rather than from code |
+| `phpstan/phpstan-phpunit` | Wired through `phpstan.neon` rather than referenced in code |
+| `phpstan/phpstan-strict-rules` | Wired through `phpstan.neon` rather than referenced in code |
+| `/^PHP_CodeSniffer\\/` | Sniffs bundled inside the ECS vendor tree, unknown to the analyser |
+| `/^PhpCsFixer\\/` | Fixers bundled inside the ECS vendor tree, unknown to the analyser |
+
+Only `UNUSED_DEPENDENCY` is excluded per package, so every other kind of error
+is still reported for them. `icanhazstring/composer-unused`, `rector/rector`,
+`shipmonk/composer-dependency-analyser` and `symplify/easy-coding-standard` are
+deliberately absent: a scanned file references each one, which proves it used.
 
 ---
 
