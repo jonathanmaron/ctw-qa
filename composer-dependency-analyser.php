@@ -7,12 +7,12 @@ use Ctw\Qa\ComposerDependencyAnalyser\Config\Configuration\DefaultIgnoredUnknown
 use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
 
 /**
- * The filters below are this package's own classes, and unlike its sibling
- * "composer-unused.php" this file needs no require of the autoloader to reach
- * them: the analyser loads the vendor directory belonging to the composer.json
- * it is analysing before it reads this file. That holds even when CI installs
- * the tool into a throwaway project outside this tree, so that resolving it
- * cannot disturb the resolution being checked.
+ * The filters below are this package's own classes, and this file needs no
+ * require of the autoloader to reach them: the analyser loads the vendor
+ * directory belonging to the composer.json it is analysing before it reads
+ * this file. That holds even when CI installs the tool into a throwaway
+ * project outside this tree, so that resolving it cannot disturb the
+ * resolution being checked.
  */
 $fileExtensions       = new DefaultFileExtensions();
 $packageErrors        = new DefaultIgnoredPackageErrors();
@@ -42,7 +42,6 @@ foreach ($unknownClassPatterns() as $unknownClassPattern) {
 $configuration->addPathsToScan(
     [
         sprintf('%s/composer-dependency-analyser.php', __DIR__),
-        sprintf('%s/composer-unused.php', __DIR__),
         sprintf('%s/ecs.php', __DIR__),
         sprintf('%s/rector.php', __DIR__),
     ],

@@ -76,7 +76,6 @@ final class DefaultIgnoredPackageErrorsTest extends TestCase
     {
         $actual = ($this->defaultIgnoredPackageErrors)();
 
-        self::assertArrayNotHasKey('icanhazstring/composer-unused', $actual);
         self::assertArrayNotHasKey('rector/rector', $actual);
         self::assertArrayNotHasKey('shipmonk/composer-dependency-analyser', $actual);
         self::assertArrayNotHasKey('symplify/easy-coding-standard', $actual);

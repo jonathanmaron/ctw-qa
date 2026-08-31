@@ -5,7 +5,6 @@
     "type": "library",
     "require": {
         "php": "^8.4",
-        "icanhazstring/composer-unused": "^0.9.6",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan": "^2.0",
         "phpstan/phpstan-phpunit": "^2.0",
@@ -38,21 +37,18 @@
     },
     "scripts": {
         "composer-dependency-analyser": "php vendor/bin/composer-dependency-analyser",
-        "composer-unused": "php vendor/bin/composer-unused",
         "ecs": "php vendor/bin/ecs --clear-cache",
         "ecs-fix": "php vendor/bin/ecs --clear-cache --fix",
         "phpstan": "bash bin/phpstan.sh",
         "phpstan-baseline": "bash bin/phpstan-baseline.sh",
         "qa": [
             "@composer-dependency-analyser",
-            "@composer-unused",
             "@rector",
             "@ecs",
             "@phpstan"
         ],
         "qa-fix": [
             "@composer-dependency-analyser",
-            "@composer-unused",
             "@rector-fix",
             "@ecs-fix",
             "@phpstan"
