@@ -14,6 +14,7 @@ use PhpCsFixer\Fixer\Operator\NotOperatorWithSuccessorSpaceFixer;
 use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\Whitespace\NoExtraBlankLinesFixer;
 use PhpCsFixer\Fixer\Whitespace\StatementIndentationFixer;
+use Symplify\CodingStandard\Fixer\Spacing\MethodChainingNewlineFixer;
 
 class DefaultSkip
 {
@@ -46,8 +47,18 @@ class DefaultSkip
 
         /**
          * Personal preferences
+         *
+         * MethodChainingNewlineFixer breaks a chained call onto its own line,
+         * turning "new Temp($id)->createPath()" into two. A short chain reads
+         * better on one line, and the fixer offers no length threshold, so it
+         * is off. MethodChainingIndentationFixer stays on: it only aligns a
+         * chain already written across lines, which is the deliberate case.
          */
-        $personal = [NoBlankLinesAfterClassOpeningFixer::class, NoExtraBlankLinesFixer::class];
+        $personal = [
+            MethodChainingNewlineFixer::class,
+            NoBlankLinesAfterClassOpeningFixer::class,
+            NoExtraBlankLinesFixer::class,
+        ];
 
         return [...$project, ...$common, ...$psr12, ...$personal];
     }

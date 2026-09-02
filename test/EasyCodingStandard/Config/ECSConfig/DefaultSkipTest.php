@@ -15,6 +15,7 @@ use PhpCsFixer\Fixer\PhpTag\BlankLineAfterOpeningTagFixer;
 use PhpCsFixer\Fixer\Whitespace\NoExtraBlankLinesFixer;
 use PhpCsFixer\Fixer\Whitespace\StatementIndentationFixer;
 use PHPUnit\Framework\TestCase;
+use Symplify\CodingStandard\Fixer\Spacing\MethodChainingNewlineFixer;
 
 final class DefaultSkipTest extends TestCase
 {
@@ -95,6 +96,7 @@ final class DefaultSkipTest extends TestCase
     {
         $actual = ($this->defaultSkip)();
 
+        self::assertContains(MethodChainingNewlineFixer::class, $actual);
         self::assertContains(NoBlankLinesAfterClassOpeningFixer::class, $actual);
         self::assertContains(NoExtraBlankLinesFixer::class, $actual);
     }
@@ -111,13 +113,13 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly the curated 15 skip entries (6 project + 1 common + 6 PSR-12 + 2 personal).
+     * Test that invocation returns exactly the curated 16 skip entries (6 project + 1 common + 6 PSR-12 + 3 personal).
      */
-    public function testInvokeReturnsFifteenSkipEntries(): void
+    public function testInvokeReturnsSixteenSkipEntries(): void
     {
         $actual = ($this->defaultSkip)();
 
-        self::assertCount(15, $actual);
+        self::assertCount(16, $actual);
     }
 
     /**
@@ -146,18 +148,25 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that all eight fixer class strings (excluding the keyed entry) live under PhpCsFixer\.
+     * Test that all nine fixer class strings (excluding the keyed entry) name a
+     * fixer from a vendor that ships them.
+     *
+     * Most come from PHP-CS-Fixer, but not all: Symplify contributes its own
+     * fixers to the sets, and one of those is skipped here.
      */
-    public function testInvokeFixerClassNamesUsePhpCsFixerNamespace(): void
+    public function testInvokeFixerClassNamesNameAFixerVendor(): void
     {
         $actual       = ($this->defaultSkip)();
         $stringValues = array_filter($actual, is_string(...));
         $fixerClasses = array_filter($stringValues, static fn(string $value): bool => str_contains($value, '\\Fixer\\'));
 
-        self::assertCount(8, $fixerClasses);
+        self::assertCount(9, $fixerClasses);
 
         foreach ($fixerClasses as $fixerClass) {
-            self::assertStringStartsWith('PhpCsFixer\\', $fixerClass);
+            $vendor = str_starts_with($fixerClass, 'PhpCsFixer\\')
+                || str_starts_with($fixerClass, 'Symplify\\');
+
+            self::assertTrue($vendor, sprintf('Unexpected fixer vendor: %s', $fixerClass));
         }
     }
 
