@@ -4,9 +4,6 @@ declare(strict_types=1);
 namespace Ctw\Qa\Rector\Config\RectorConfig;
 
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
-use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
-use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
-use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 
 class DefaultSkip
 {
@@ -47,11 +44,7 @@ class DefaultSkip
         /**
          * Rules defined in SetList::NAMING that should be skipped
          */
-        $naming = [
-            RenameParamToMatchTypeRector::class,
-            RenameVariableToMatchMethodCallReturnTypeRector::class,
-            RenameVariableToMatchNewTypeRector::class,
-        ];
+        $naming = [];
 
         return [
             ...$project,

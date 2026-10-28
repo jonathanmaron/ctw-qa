@@ -7,9 +7,6 @@ namespace CtwTest\Qa\Rector\Config\RectorConfig;
 use Ctw\Qa\Rector\Config\RectorConfig\DefaultSkip;
 use PHPUnit\Framework\TestCase;
 use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
-use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
-use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
-use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
 
 final class DefaultSkipTest extends TestCase
 {
@@ -48,15 +45,14 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation includes NAMING skipped rules.
+     * Test that invocation skips no NAMING rule, since Rector 2.8.0 deprecated the three it skipped and dropped them from the set.
      */
-    public function testInvokeIncludesNamingSkippedRules(): void
+    public function testInvokeSkipsNoNamingRules(): void
     {
         $actual = ($this->defaultSkip)();
+        $naming = array_filter([...array_keys($actual), ...$actual], static fn(mixed $value): bool => is_string($value) && str_starts_with($value, 'Rector\\Naming\\'));
 
-        self::assertContains(RenameParamToMatchTypeRector::class, $actual);
-        self::assertContains(RenameVariableToMatchMethodCallReturnTypeRector::class, $actual);
-        self::assertContains(RenameVariableToMatchNewTypeRector::class, $actual);
+        self::assertSame([], $naming);
     }
 
     /**
@@ -82,13 +78,13 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly the curated 10 skip entries (6 project + 1 coding-style + 3 naming).
+     * Test that invocation returns exactly the curated 7 skip entries (6 project + 1 coding-style).
      */
-    public function testInvokeReturnsTenSkipEntries(): void
+    public function testInvokeReturnsSevenSkipEntries(): void
     {
         $actual = ($this->defaultSkip)();
 
-        self::assertCount(10, $actual);
+        self::assertCount(7, $actual);
     }
 
     /**
