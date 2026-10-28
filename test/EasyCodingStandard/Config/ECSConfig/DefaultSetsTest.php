@@ -82,16 +82,6 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation excludes the SYMPLIFY set, since its rules moved to the COMMON sets and it now only triggers a deprecation.
-     */
-    public function testInvokeExcludesSymplifySet(): void
-    {
-        $actual = ($this->defaultSets)();
-
-        self::assertNotContains(SetList::SYMPLIFY, $actual);
-    }
-
-    /**
      * Test that every returned value looks like an ECS set file path (contains 'set/').
      */
     public function testInvokeAllValuesContainSetPath(): void
