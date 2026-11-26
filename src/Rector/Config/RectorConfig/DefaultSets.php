@@ -20,7 +20,6 @@ class DefaultSets
             SetList::CODE_QUALITY,
             SetList::CODING_STYLE,
             SetList::DEAD_CODE,
-            SetList::NAMING,
         ];
     }
 }

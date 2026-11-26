@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Ctw\Qa\Rector\Config\RectorConfig;
 
-use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
 
 class DefaultSkip
 {
@@ -32,19 +31,12 @@ class DefaultSkip
         /**
          * Rules defined in SetList::CODING_STYLE that should be skipped
          */
-        $codingStyle = [
-            NewlineAfterStatementRector::class => '*.phtml',
-        ];
+        $codingStyle = [];
 
         /**
          * Rules defined in SetList::DEAD_CODE that should be skipped
          */
         $deadCode = [];
-
-        /**
-         * Rules defined in SetList::NAMING that should be skipped
-         */
-        $naming = [];
 
         return [
             ...$project,
@@ -53,7 +45,6 @@ class DefaultSkip
             ...$codeQuality,
             ...$codingStyle,
             ...$deadCode,
-            ...$naming,
         ];
     }
 }

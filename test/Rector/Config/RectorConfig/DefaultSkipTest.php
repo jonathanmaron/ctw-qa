@@ -45,7 +45,8 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation skips no NAMING rule, since Rector 2.8.0 deprecated the three it skipped and dropped them from the set.
+     * Test that invocation skips no Naming rule: Rector 2.8.0 deprecated the three it skipped, and Rector 2.9 removed the
+     * naming set.
      */
     public function testInvokeSkipsNoNamingRules(): void
     {
@@ -56,14 +57,15 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation maps NewlineAfterStatementRector to *.phtml templates only.
+     * Test that invocation no longer skips NewlineAfterStatementRector: Rector 2.9 deprecated it and dropped it from the
+     * coding style set, so skipping it only raises a warning.
      */
-    public function testInvokeMapsNewlineAfterStatementRectorToPhtmlOnly(): void
+    public function testInvokeNoLongerSkipsNewlineAfterStatementRector(): void
     {
         $actual = ($this->defaultSkip)();
 
-        self::assertArrayHasKey(NewlineAfterStatementRector::class, $actual);
-        self::assertSame('*.phtml', $actual[NewlineAfterStatementRector::class]);
+        self::assertArrayNotHasKey(NewlineAfterStatementRector::class, $actual);
+        self::assertNotContains(NewlineAfterStatementRector::class, $actual);
     }
 
     /**
@@ -78,13 +80,13 @@ final class DefaultSkipTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly the curated 7 skip entries (6 project + 1 coding-style).
+     * Test that invocation returns exactly the curated 6 skip entries (the project directories).
      */
-    public function testInvokeReturnsSevenSkipEntries(): void
+    public function testInvokeReturnsSixSkipEntries(): void
     {
         $actual = ($this->defaultSkip)();
 
-        self::assertCount(7, $actual);
+        self::assertCount(6, $actual);
     }
 
     /**

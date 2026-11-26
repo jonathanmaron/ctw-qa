@@ -32,7 +32,6 @@ final class DefaultSetsTest extends TestCase
             SetList::CODE_QUALITY,
             SetList::CODING_STYLE,
             SetList::DEAD_CODE,
-            SetList::NAMING,
         ];
 
         $actual = ($this->defaultSets)();
@@ -51,13 +50,13 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation returns exactly six sets, pinning the curated set count.
+     * Test that invocation returns exactly five sets, pinning the curated set count.
      */
-    public function testInvokeReturnsExactlySixSets(): void
+    public function testInvokeReturnsExactlyFiveSets(): void
     {
         $actual = ($this->defaultSets)();
 
-        self::assertCount(6, $actual);
+        self::assertCount(5, $actual);
     }
 
     /**
@@ -111,13 +110,15 @@ final class DefaultSetsTest extends TestCase
     }
 
     /**
-     * Test that invocation includes the NAMING set.
+     * Test that invocation includes no naming set: Rector 2.9 removed it (SetList::NAMING no longer exists).
      */
-    public function testInvokeIncludesNamingSet(): void
+    public function testInvokeIncludesNoNamingSet(): void
     {
         $actual = ($this->defaultSets)();
 
-        self::assertContains(SetList::NAMING, $actual);
+        $naming = array_filter($actual, static fn(string $set): bool => str_ends_with($set, '/naming.php'));
+
+        self::assertSame([], $naming);
     }
 
     /**

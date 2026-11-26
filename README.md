@@ -280,12 +280,13 @@ composer qa-fix    # Auto-fix everything possible
 
 | Set | Description |
 |-----|-------------|
-| `UP_TO_PHP_83` | Modernizes code to PHP 8.3 syntax |
-| `PHPUNIT_100` | Upgrades PHPUnit to version 10.0+ |
+| `UP_TO_PHP_85` | Modernizes code to PHP 8.5 syntax |
+| `PHPUnitSetList::COMPOSER_BASED` | Upgrades PHPUnit code to the version installed by Composer |
 | `CODE_QUALITY` | Simplifies expressions, removes redundancy |
 | `CODING_STYLE` | Enforces consistent style |
 | `DEAD_CODE` | Removes unused code |
-| `NAMING` | Improves naming conventions |
+
+Rector 2.9 removed the `NAMING` set, so it is no longer included.
 
 ### ECS (Code Style)
 
